@@ -7,6 +7,7 @@ using Android;
 using Android.Content.PM;
 using Android.Provider;
 using Android.Database;
+using System;
 
 namespace heariit_ma
 {
@@ -74,11 +75,48 @@ namespace heariit_ma
                 var audioTitle = audioCursor.GetString(TITLE_Column);
                 var artist = audioCursor.GetString(ARTIST_Column);
                 var time = audioCursor.GetString(DURATION_Column);
-                items.Add(new Datos { Title = audioTitle, Artist = artist });
+                string timestring = convertDuration(Convert.ToInt32(time));
+                items.Add(new Datos { Title = audioTitle, Artist = artist, Time=timestring });
             }
 
             audioCursor.Close();
             listData.Adapter = audioAdapter = new AudioAdapter(this, items);
+        }
+
+        private string convertDuration(long duration) {
+            long hours = 0;
+            string outTime = null;
+            try
+            {
+                hours = (duration / 3600000);
+            }
+            catch (Exception e)
+            {
+                return outTime;
+            }
+            long remaining_minutes = (duration - (hours * 3600000)) / 60000;
+            string minutes = Convert.ToString(remaining_minutes);
+            if (minutes == "0"){
+                minutes = "00";
+            }
+
+            long remaining_seconds = (duration - (hours * 3600000) - (remaining_minutes * 60000));
+            String seconds = Convert.ToString(remaining_seconds);
+            if (seconds.Length < 2){
+                seconds = "00";
+            }else{
+                seconds = seconds.Substring(0, 2);
+            }
+            if (hours > 0){
+                if (minutes.Length < 2){
+                    minutes = "0" + minutes;
+                }
+                outTime = hours + ":" + minutes + ":" + seconds;
+            }else{
+                outTime = minutes + ":" + seconds;
+            }
+
+            return outTime;
         }
 
     }
