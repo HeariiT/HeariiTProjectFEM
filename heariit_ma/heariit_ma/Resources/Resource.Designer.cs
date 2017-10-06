@@ -60,6 +60,9 @@ namespace heariit_ma
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050004
+			public const int artist = 2131034116;
+			
 			// aapt resource value: 0x7f050001
 			public const int imageView1 = 2131034113;
 			
@@ -75,14 +78,11 @@ namespace heariit_ma
 			// aapt resource value: 0x7f050000
 			public const int relativeLayout1 = 2131034112;
 			
-			// aapt resource value: 0x7f050003
-			public const int textView1 = 2131034115;
-			
-			// aapt resource value: 0x7f050004
-			public const int textView2 = 2131034116;
-			
 			// aapt resource value: 0x7f050006
-			public const int textView5 = 2131034118;
+			public const int time = 2131034118;
+			
+			// aapt resource value: 0x7f050003
+			public const int title = 2131034115;
 			
 			static Id()
 			{
