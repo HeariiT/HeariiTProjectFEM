@@ -49,8 +49,24 @@ namespace heariit_ma
             String urlAudio = this.Intent.GetStringExtra("urlAudio");
             _player = new MediaPlayer();
             mediaController = new Android.Widget.MediaController(this, true);
+            int songID = this.Intent.GetIntExtra("songID", -1);
+            
             imgUrlAlbum(urlAlbum);
-            playAudio(urlAudio);
+            if (songID == MediaPlayerRegistry.currentSong){
+                _player = MediaPlayerRegistry.currentPlayer;
+                continueAudio(urlAudio);
+            }else{
+                playAudio(urlAudio);
+                MediaPlayerRegistry.currentSong = songID;
+            }
+            
+        }
+
+        private void continueAudio(String urlAudio)
+        {
+            mediaController.SetMediaPlayer(this);
+            mediaController.SetAnchorView(FindViewById(Resource.Id.linearLayout));
+            _player.Start();
         }
 
         private void playAudio(String urlAudio){
@@ -60,7 +76,8 @@ namespace heariit_ma
             _player.Prepare();
             _player.Start();
             MediaPlayerRegistry.currentPlayer = _player;
-        }
+
+    }
 
         private void imgUrlAlbum(String imgUrlAlbum)
         {

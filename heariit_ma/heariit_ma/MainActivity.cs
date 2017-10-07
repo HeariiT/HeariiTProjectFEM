@@ -61,25 +61,35 @@ namespace heariit_ma
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
             
             var item = this.audioAdapter.GetItemAtPosition(e.Position);
+            String urlAlbum = item.ArtistAlbum;
+            String urlAudio = item.ArrPath;
+            int position_now = 0;
             if (current_intent != null)
             {
                 current_intent = null;
-                if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
-                    
-                
 
+                if (e.Position == MediaPlayerRegistry.currentSong)
+                {
+                    position_now = MediaPlayerRegistry.currentPlayer.CurrentPosition;
+                }
+                else
+                {
+                    if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
+                }
+
+                
             }
             Console.WriteLine(e.Position);
             
-            String urlAlbum = item.ArtistAlbum;
-            String urlAudio = item.ArrPath;
+            
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
-            intent.PutExtra("currentPosition", e.Position);
-            sessionId++;
+            intent.PutExtra("songID", e.Position);
             current_intent = intent;
             this.StartActivity(current_intent);
+            
+
             
 
         }

@@ -16,5 +16,6 @@ namespace heariit_ma
     public class MediaPlayerRegistry{
 
         public static MediaPlayer currentPlayer = new MediaPlayer();
+        public static int currentSong = -1;
     }
 }
