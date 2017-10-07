@@ -9,6 +9,7 @@ using Android.Provider;
 using Android.Database;
 using System;
 using Android.Content;
+using Android.Media;
 
 namespace heariit_ma
 {
@@ -19,8 +20,19 @@ namespace heariit_ma
         List<Datos> items;
         ListView listData;
         AudioAdapter audioAdapter;
+        MediaPlayer CurrentPlayer;
+        Intent current_intent;
+        private int sessionId=0;
+        public void SetPlayer(MediaPlayer _player){
+            CurrentPlayer = _player;
+        }
+
+        public MediaPlayer GetPlayer(){
+            return CurrentPlayer;
+        }
 
         protected override void OnCreate(Bundle savedInstanceState){
+            current_intent = null;
             base.OnCreate(savedInstanceState);
 
             // Set our view from the "main" layout resource
@@ -42,16 +54,33 @@ namespace heariit_ma
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
                 => listView_ItemClick(sender, args);
             audioCursor();
+
+            
         }
 
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
+            
             var item = this.audioAdapter.GetItemAtPosition(e.Position);
+            if (current_intent != null)
+            {
+                current_intent = null;
+                if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
+                    
+                
+
+            }
+            Console.WriteLine(e.Position);
+            
             String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
-            this.StartActivity(intent);
+            intent.PutExtra("currentPosition", e.Position);
+            sessionId++;
+            current_intent = intent;
+            this.StartActivity(current_intent);
+            
 
         }
 

@@ -14,6 +14,7 @@ using static Android.Views.View;
 using Java.IO;
 using Android.Graphics;
 
+
 namespace heariit_ma
 {
     [Activity(Label = "HeariiT Music")]
@@ -38,7 +39,6 @@ namespace heariit_ma
 
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
-
             SetContentView(Resource.Layout.Reproductive);
             linearLayout = FindViewById<LinearLayout>(Resource.Id.linearLayout);
             imgAlbum = FindViewById<ImageView>(Resource.Id.imageView_Album);
@@ -56,11 +56,12 @@ namespace heariit_ma
         private void playAudio(String urlAudio){
             mediaController.SetMediaPlayer(this);
             mediaController.SetAnchorView(FindViewById(Resource.Id.linearLayout));
-
             _player.SetDataSource(urlAudio);
             _player.Prepare();
             _player.Start();
+            MediaPlayerRegistry.currentPlayer = _player;
         }
+
         private void imgUrlAlbum(String imgUrlAlbum)
         {
             if (imgUrlAlbum == null)
