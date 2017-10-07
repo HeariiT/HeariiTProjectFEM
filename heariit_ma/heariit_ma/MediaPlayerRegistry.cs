@@ -17,5 +17,6 @@ namespace heariit_ma
 
         public static MediaPlayer currentPlayer = new MediaPlayer();
         public static int currentSong = -1;
+        public static Dictionary<int, String[]> Songs;
     }
 }

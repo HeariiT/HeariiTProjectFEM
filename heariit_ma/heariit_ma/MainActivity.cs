@@ -14,23 +14,15 @@ using Android.Media;
 namespace heariit_ma
 {
     [Activity(Label = "HeariiT", MainLauncher = true)]
-    public class MainActivity : Activity{
+    public class MainActivity : Activity {
         private int TRACK_Column, _ID_Column, DATA_Column, YEAR_Column, TITLE_Column;
         private int DURATION_Column, ALBUM_ID_Column, ALBUM_Column, ARTIST_Column;
         List<Datos> items;
         ListView listData;
         AudioAdapter audioAdapter;
-        MediaPlayer CurrentPlayer;
         Intent current_intent;
-        public void SetPlayer(MediaPlayer _player){
-            CurrentPlayer = _player;
-        }
 
-        public MediaPlayer GetPlayer(){
-            return CurrentPlayer;
-        }
-
-        protected override void OnCreate(Bundle savedInstanceState){
+        protected override void OnCreate(Bundle savedInstanceState) {
             current_intent = null;
             base.OnCreate(savedInstanceState);
 
@@ -38,11 +30,11 @@ namespace heariit_ma
             SetContentView(Resource.Layout.Main);
             listData = FindViewById<ListView>(Resource.Id.listView1);
             items = new List<Datos>();
-            if((int) Build.VERSION.SdkInt >= 23) {
-                if((CheckSelfPermission (
-                    Manifest.Permission.ReadExternalStorage) != (int) Permission.Granted) 
+            if ((int)Build.VERSION.SdkInt >= 23) {
+                if ((CheckSelfPermission(
+                    Manifest.Permission.ReadExternalStorage) != (int)Permission.Granted)
                 || (CheckSelfPermission(
-                    Manifest.Permission.WriteExternalStorage) != (int) Permission.Granted)){
+                    Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)) {
 
                     RequestPermissions(new string[] {
                                             Manifest.Permission.ReadExternalStorage,
@@ -50,21 +42,19 @@ namespace heariit_ma
                                         }, 1);
                 }
             }
+            
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
                 => listView_ItemClick(sender, args);
             audioCursor();
-
             
         }
 
-        void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
-            play_song(e.Position);
-            
-        }
-
-        public void play_song(int e)
-        {
+        void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
+            int e = E.Position;
             var item = this.audioAdapter.GetItemAtPosition(e);
+            var mySongs = listData;
+            System.Console.WriteLine(mySongs);
+
             String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
             String songTitle = item.Title;
@@ -76,22 +66,40 @@ namespace heariit_ma
                 current_intent = null;
 
                 //Me verifica si la canción que está sonando ahorita es la misma para no detenerla
-                if (e != MediaPlayerRegistry.currentSong)
-                {
-                    if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
+                if (e != MediaPlayerRegistry.currentSong) {
+                    if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop();}
                 }
-
             }
 
+            
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
             intent.PutExtra("songID", e);
             intent.PutExtra("songTitle", songTitle);
             intent.PutExtra("songArtist", songArtist);
+            intent.PutExtra("listSize", items.Count);
             current_intent = intent;
             this.StartActivity(current_intent);
         }
+
+        public void setSongs(){
+
+            Dictionary<int, String[]> myMusicList = new Dictionary<int, String[]>();
+            
+            var length = items.Count;
+            for (int i = 0; i < length; i++){
+                String[] mu = new String[4];
+                var item = this.audioAdapter.GetItemAtPosition(i);
+                mu[0] = item.ArtistAlbum;
+                mu[1] = item.ArrPath;
+                mu[2] = item.Title;
+                mu[3] = item.Artist;
+                myMusicList.Add(i, mu);
+            }
+            MediaPlayerRegistry.Songs = myMusicList;
+        }
+
         private void audioCursor(){
             string[] information = {
                 MediaStore.Audio.Media.InterfaceConsts.Id,
@@ -135,6 +143,7 @@ namespace heariit_ma
 
             audioCursor.Close();
             listData.Adapter = audioAdapter = new AudioAdapter(this, items);
+            setSongs();
         }
 
         private string convertDuration(long duration) {
