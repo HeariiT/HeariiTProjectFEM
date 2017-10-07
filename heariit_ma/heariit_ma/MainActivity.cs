@@ -8,6 +8,7 @@ using Android.Content.PM;
 using Android.Provider;
 using Android.Database;
 using System;
+using Android.Content;
 
 namespace heariit_ma
 {
@@ -38,7 +39,20 @@ namespace heariit_ma
                                         }, 1);
                 }
             }
+            listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
+                => listView_ItemClick(sender, args);
             audioCursor();
+        }
+
+        void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
+            var item = this.audioAdapter.GetItemAtPosition(e.Position);
+            //String urlAlbum = item.ArtistAlbum;
+            String urlAudio = item.ArrPath;
+            var intent = new Intent(this, typeof(Reproductive));
+            //intent.PutExtra("urlAlbum", urlAlbum);
+            intent.PutExtra("urlAudio", urlAudio);
+            this.StartActivity(intent);
+
         }
 
         private void audioCursor(){
@@ -76,7 +90,8 @@ namespace heariit_ma
                 var artist = audioCursor.GetString(ARTIST_Column);
                 var time = audioCursor.GetString(DURATION_Column);
                 string timestring = convertDuration(Convert.ToInt32(time));
-                items.Add(new Datos { Title = audioTitle, Artist = artist, Time=timestring });
+                var arrPath = audioCursor.GetString(DATA_Column);
+                items.Add(new Datos() { Title = audioTitle, Artist = artist, Time=timestring, ArrPath = arrPath });
             }
 
             audioCursor.Close();

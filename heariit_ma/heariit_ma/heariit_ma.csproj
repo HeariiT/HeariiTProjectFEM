@@ -57,6 +57,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="models\AudioAdapter.cs" />
     <Compile Include="models\Datos.cs" />
+    <Compile Include="Reproductive.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
