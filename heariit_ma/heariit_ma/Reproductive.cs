@@ -11,6 +11,8 @@ using Android.Views;
 using Android.Widget;
 using Android.Media;
 using static Android.Views.View;
+using Java.IO;
+using Android.Graphics;
 
 namespace heariit_ma
 {
@@ -20,10 +22,8 @@ namespace heariit_ma
         MediaPlayer _player;
         MediaController mediaController;
         LinearLayout linearLayout;
-
-        public int AudioSessionId{
-            get { return 0; }
-        }
+        ImageView imgAlbum;
+        public int AudioSessionId{get { return 0;}}
 
         public int BufferPercentage { get { return _player.CurrentPosition *100 /_player.Duration; } }
 
@@ -41,11 +41,15 @@ namespace heariit_ma
 
             SetContentView(Resource.Layout.Reproductive);
             linearLayout = FindViewById<LinearLayout>(Resource.Id.linearLayout);
+            imgAlbum = FindViewById<ImageView>(Resource.Id.imageView_Album);
+
+
             linearLayout.SetOnTouchListener(this);
             String urlAlbum = this.Intent.GetStringExtra("urlAlbum");
             String urlAudio = this.Intent.GetStringExtra("urlAudio");
             _player = new MediaPlayer();
             mediaController = new Android.Widget.MediaController(this, true);
+            imgUrlAlbum(urlAlbum);
             playAudio(urlAudio);
         }
 
@@ -57,7 +61,23 @@ namespace heariit_ma
             _player.Prepare();
             _player.Start();
         }
+        private void imgUrlAlbum(String imgUrlAlbum)
+        {
+            if (imgUrlAlbum == null)
+            {
+                imgAlbum.SetImageResource(Resource.Drawable.auriculares);
 
+            }
+            else
+            {
+                File imgFile = new File(imgUrlAlbum);
+                if (imgFile.Exists())
+                {
+                    Bitmap myBitmap = BitmapFactory.DecodeFile(imgFile.AbsolutePath);
+                    imgAlbum.SetImageBitmap(myBitmap);
+                }
+            }
+        }
         public bool OnTouch(View v, MotionEvent e)
         {
             switch (e.Action) {

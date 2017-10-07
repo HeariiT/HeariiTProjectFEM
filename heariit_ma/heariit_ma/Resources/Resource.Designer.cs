@@ -66,6 +66,9 @@ namespace heariit_ma
 			// aapt resource value: 0x7f050001
 			public const int imageView1 = 2131034113;
 			
+			// aapt resource value: 0x7f050009
+			public const int imageView_Album = 2131034121;
+			
 			// aapt resource value: 0x7f050008
 			public const int linearLayout = 2131034120;
 			

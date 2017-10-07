@@ -2,6 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
+    android:layout_height="match_parent"
 
-android:id ="@+id/linearLayout"/>
+android:id ="@+id/linearLayout">
+<ImageView
+    android:src="@drawable/auriculares"
+    android:id="@+id/imageView_Album"
+    android:layout_width="210dp"
+    android:layout_height="210dp"
+    android:layout_marginTop="90dp" android:layout_marginLeft="60dp"/>
+  
+</LinearLayout>

@@ -46,10 +46,10 @@ namespace heariit_ma
 
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
             var item = this.audioAdapter.GetItemAtPosition(e.Position);
-            //String urlAlbum = item.ArtistAlbum;
+            String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
             var intent = new Intent(this, typeof(Reproductive));
-            //intent.PutExtra("urlAlbum", urlAlbum);
+            intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
             this.StartActivity(intent);
 
@@ -84,14 +84,16 @@ namespace heariit_ma
             TRACK_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Track);
             TITLE_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Title);
             ARTIST_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Artist);
-            while (audioCursor.MoveToNext())
-            {
+            while (audioCursor.MoveToNext()){
                 var audioTitle = audioCursor.GetString(TITLE_Column);
                 var artist = audioCursor.GetString(ARTIST_Column);
                 var time = audioCursor.GetString(DURATION_Column);
                 string timestring = convertDuration(Convert.ToInt32(time));
                 var arrPath = audioCursor.GetString(DATA_Column);
-                items.Add(new Datos() { Title = audioTitle, Artist = artist, Time=timestring, ArrPath = arrPath });
+                var artistAlbum = audioCursor.GetString(ALBUM_ID_Column);
+                String urlAlbum = urlAlbumArt(artistAlbum);
+                items.Add(new Datos() { Title = audioTitle, Artist = artist, Time=timestring, ArrPath = arrPath,
+                                        ArtistAlbum=urlAlbum});
             }
 
             audioCursor.Close();
@@ -134,6 +136,22 @@ namespace heariit_ma
             return outTime;
         }
 
+        private String urlAlbumArt(String artistAlbum)
+        {
+            String[] projection = new String[] { MediaStore.Audio.Albums.InterfaceConsts.AlbumArt };
+            String selection = MediaStore.Audio.Albums.InterfaceConsts.Id + "=?";
+            String [] selectionArgs = new String[] { artistAlbum };
+            ICursor cursor = ContentResolver.Query(MediaStore.Audio.Albums.ExternalContentUri, projection, selection, selectionArgs, null);
+            String urlAlbum = "";
+            if (cursor != null) {
+                if (cursor.MoveToFirst()) {
+                    urlAlbum = cursor.GetString(cursor.GetColumnIndexOrThrow
+                        (MediaStore.Audio.Albums.InterfaceConsts.AlbumArt));
+                }
+                cursor.Close();
+            }
+            return urlAlbum;
+        }
     }
     
 
