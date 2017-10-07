@@ -22,7 +22,6 @@ namespace heariit_ma
         AudioAdapter audioAdapter;
         MediaPlayer CurrentPlayer;
         Intent current_intent;
-        private int sessionId=0;
         public void SetPlayer(MediaPlayer _player){
             CurrentPlayer = _player;
         }
@@ -59,39 +58,40 @@ namespace heariit_ma
         }
 
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e) {
+            play_song(e.Position);
             
-            var item = this.audioAdapter.GetItemAtPosition(e.Position);
+        }
+
+        public void play_song(int e)
+        {
+            var item = this.audioAdapter.GetItemAtPosition(e);
             String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
             String songTitle = item.Title;
             String songArtist = item.Artist;
 
             //Me verifica si hay un intent actualmente
-            if (current_intent != null){
+            if (current_intent != null)
+            {
                 current_intent = null;
 
                 //Me verifica si la canción que está sonando ahorita es la misma para no detenerla
-                if (e.Position != MediaPlayerRegistry.currentSong){
+                if (e != MediaPlayerRegistry.currentSong)
+                {
                     if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
                 }
-                
+
             }
-            
-            
+
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
-            intent.PutExtra("songID", e.Position);
+            intent.PutExtra("songID", e);
             intent.PutExtra("songTitle", songTitle);
             intent.PutExtra("songArtist", songArtist);
             current_intent = intent;
             this.StartActivity(current_intent);
-            
-
-            
-
         }
-
         private void audioCursor(){
             string[] information = {
                 MediaStore.Audio.Media.InterfaceConsts.Id,

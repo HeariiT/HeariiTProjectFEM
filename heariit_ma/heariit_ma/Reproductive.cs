@@ -18,7 +18,7 @@ using Android.Graphics;
 namespace heariit_ma
 {
     [Activity(Label = "HeariiT Music")]
-    public class Reproductive : Activity, MediaController.IMediaPlayerControl, IOnTouchListener {
+    public class Reproductive : Activity, MediaController.IMediaPlayerControl, IOnTouchListener, IOnClickListener {
 
         MediaPlayer _player;
         MediaController mediaController;
@@ -26,14 +26,11 @@ namespace heariit_ma
         ImageView imgAlbum;
         TextView titleSong;
         TextView artistSong;
+
         public int AudioSessionId{get { return 0;}}
-
         public int BufferPercentage { get { return _player.CurrentPosition *100 /_player.Duration; } }
-
         public int CurrentPosition {get { return _player.CurrentPosition; } }
-
         public int Duration {get { return _player.Duration; } }
-
         public bool IsPlaying {get { return _player.IsPlaying; } }
 
        
@@ -58,6 +55,9 @@ namespace heariit_ma
             string artist = this.Intent.GetStringExtra("songArtist");
             titleSong.SetText(" " + title, TextView.BufferType.Normal);
             artistSong.SetText(" " + artist, TextView.BufferType.Normal);
+            
+            //Se Inician los botones
+
 
             //Si la canción ya está siendo escuchada, me la continua y no me la reniciia.
             imgUrlAlbum(urlAlbum);
@@ -81,12 +81,15 @@ namespace heariit_ma
         private void playAudio(String urlAudio){
             mediaController.SetMediaPlayer(this);
             mediaController.SetAnchorView(FindViewById(Resource.Id.linearLayout));
+            //Next-Previous
+            mediaController.SetPrevNextListeners(this, this);
             _player.SetDataSource(urlAudio);
             _player.Prepare();
             _player.Start();
             MediaPlayerRegistry.currentPlayer = _player;
 
-    }
+        }
+
 
         private void imgUrlAlbum(String imgUrlAlbum)
         {
@@ -132,7 +135,7 @@ namespace heariit_ma
             return true;
         }
 
-
+        
 
         public void Pause()
         {
@@ -147,6 +150,28 @@ namespace heariit_ma
         public void Start()
         {
             _player.Start();
+        }
+
+        public void Next()
+        {
+            
+        }
+
+        public void Prev(View v)
+        {
+            
+        }
+
+        public void OnClick(View v)
+        {
+            string G = v.ToString();
+            char m = G[G.Length-2];
+           
+            if (m == 't'){
+
+            }else{
+
+            }
         }
     }
 }
