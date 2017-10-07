@@ -63,29 +63,27 @@ namespace heariit_ma
             var item = this.audioAdapter.GetItemAtPosition(e.Position);
             String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
-            int position_now = 0;
-            if (current_intent != null)
-            {
+            String songTitle = item.Title;
+            String songArtist = item.Artist;
+
+            //Me verifica si hay un intent actualmente
+            if (current_intent != null){
                 current_intent = null;
 
-                if (e.Position == MediaPlayerRegistry.currentSong)
-                {
-                    position_now = MediaPlayerRegistry.currentPlayer.CurrentPosition;
-                }
-                else
-                {
+                //Me verifica si la canción que está sonando ahorita es la misma para no detenerla
+                if (e.Position != MediaPlayerRegistry.currentSong){
                     if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }
                 }
-
                 
             }
-            Console.WriteLine(e.Position);
             
             
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
             intent.PutExtra("urlAudio", urlAudio);
             intent.PutExtra("songID", e.Position);
+            intent.PutExtra("songTitle", songTitle);
+            intent.PutExtra("songArtist", songArtist);
             current_intent = intent;
             this.StartActivity(current_intent);
             

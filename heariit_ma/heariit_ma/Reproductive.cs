@@ -24,6 +24,8 @@ namespace heariit_ma
         MediaController mediaController;
         LinearLayout linearLayout;
         ImageView imgAlbum;
+        TextView titleSong;
+        TextView artistSong;
         public int AudioSessionId{get { return 0;}}
 
         public int BufferPercentage { get { return _player.CurrentPosition *100 /_player.Duration; } }
@@ -42,15 +44,22 @@ namespace heariit_ma
             SetContentView(Resource.Layout.Reproductive);
             linearLayout = FindViewById<LinearLayout>(Resource.Id.linearLayout);
             imgAlbum = FindViewById<ImageView>(Resource.Id.imageView_Album);
-
-
             linearLayout.SetOnTouchListener(this);
             String urlAlbum = this.Intent.GetStringExtra("urlAlbum");
             String urlAudio = this.Intent.GetStringExtra("urlAudio");
             _player = new MediaPlayer();
             mediaController = new Android.Widget.MediaController(this, true);
+
+            //Se Asignan los Titulos y Artista
+            titleSong = FindViewById<TextView>(Resource.Id.reproductive_title);
+            artistSong = FindViewById<TextView>(Resource.Id.reproductive_artist);
             int songID = this.Intent.GetIntExtra("songID", -1);
-            
+            string title = this.Intent.GetStringExtra("songTitle");
+            string artist = this.Intent.GetStringExtra("songArtist");
+            titleSong.SetText(" " + title, TextView.BufferType.Normal);
+            artistSong.SetText(" " + artist, TextView.BufferType.Normal);
+
+            //Si la canción ya está siendo escuchada, me la continua y no me la reniciia.
             imgUrlAlbum(urlAlbum);
             if (songID == MediaPlayerRegistry.currentSong){
                 _player = MediaPlayerRegistry.currentPlayer;

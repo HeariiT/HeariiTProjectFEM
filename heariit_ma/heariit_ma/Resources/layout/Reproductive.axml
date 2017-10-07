@@ -5,11 +5,43 @@
     android:layout_height="match_parent"
 
 android:id ="@+id/linearLayout">
+  
+<TextView
+        android:text="Text" 
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true" 
+        android:scrollHorizontally="true"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:id="@+id/reproductive_title"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="20dp"
+        android:layout_marginTop="5dp" android:layout_marginLeft="5dp" android:layout_marginRight="5dp"/>
+<TextView
+        android:text="Text" 
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true" 
+        android:scrollHorizontally="true"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:id="@+id/reproductive_artist"
+        android:fontFamily="sans-serif-black"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="2dp" android:layout_marginLeft="5dp" android:layout_marginRight="5dp"/>
+
 <ImageView
     android:src="@drawable/auriculares"
     android:id="@+id/imageView_Album"
     android:layout_width="210dp"
     android:layout_height="210dp"
-    android:layout_marginTop="90dp" android:layout_marginLeft="60dp"/>
+    android:layout_marginTop="50dp" android:layout_marginLeft="60dp"/>
+
   
 </LinearLayout>
