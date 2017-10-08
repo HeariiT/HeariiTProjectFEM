@@ -48,20 +48,24 @@ namespace heariit_ma
             linearLayout = FindViewById<LinearLayout>(Resource.Id.linearLayout);
             imgAlbum = FindViewById<ImageView>(Resource.Id.imageView_Album);
             linearLayout.SetOnTouchListener(this);
-            urlAlbum = this.Intent.GetStringExtra("urlAlbum");
-            urlAudio = this.Intent.GetStringExtra("urlAudio");
             _player = new MediaPlayer();
             mediaController = new Android.Widget.MediaController(this, true);
+
+
+            //Se leen los elementos del Intent
+            urlAlbum = this.Intent.GetStringExtra("urlAlbum");
+            urlAudio = this.Intent.GetStringExtra("urlAudio");
+            songID = this.Intent.GetIntExtra("songID", -1);
+            title = this.Intent.GetStringExtra("songTitle");
+            artist = this.Intent.GetStringExtra("songArtist");
+            listSize = this.Intent.GetIntExtra("listSize", -1);
+
 
             //Se Asignan los Titulos y Artista
             titleSong = FindViewById<TextView>(Resource.Id.reproductive_title);
             artistSong = FindViewById<TextView>(Resource.Id.reproductive_artist);
 
-            //Se leen los elementos del Intent
-            songID = this.Intent.GetIntExtra("songID", -1);
-            title = this.Intent.GetStringExtra("songTitle");
-            artist = this.Intent.GetStringExtra("songArtist");
-            listSize = this.Intent.GetIntExtra("listSize", -1);
+            
 
 
             //Establecer los elementos visuales
@@ -69,12 +73,12 @@ namespace heariit_ma
 
 
             //Si la canción ya está siendo escuchada, me la continua y no me la reniciia.
-
-
+            
             if (songID == MediaPlayerRegistry.currentSong){
                 _player = MediaPlayerRegistry.currentPlayer;
                 continueAudio();
             }else{
+                MediaPlayerRegistry.currentPlayer.Stop();
                 playAudio();
                 MediaPlayerRegistry.currentSong = songID;
             }
@@ -90,7 +94,12 @@ namespace heariit_ma
         private void continueAudio() {
             mediaController.SetMediaPlayer(this);
             mediaController.SetAnchorView(FindViewById(Resource.Id.linearLayout));
+            mediaController.SetPrevNextListeners(this, this);
             _player.Start();
+            _player.Completion += delegate
+            {
+                ChangeSongBack();
+            };
         }
 
         private void playAudio(){
@@ -127,10 +136,7 @@ namespace heariit_ma
                 }
             }
         }
-
-        public void OnCompletition(){
-            ChangeSong(1);
-        }
+       
         public void ChangeSong(int N)
         {
             N = songID + N;
@@ -141,6 +147,26 @@ namespace heariit_ma
             }
             _player.Stop();
             _player.Release();
+            _player = new MediaPlayer();
+            songID = N;
+            MediaPlayerRegistry.currentSong = songID;
+            String[] NewSong = MediaPlayerRegistry.Songs[N];
+            urlAlbum = NewSong[0];
+            urlAudio = NewSong[1];
+            title = NewSong[2];
+            artist = NewSong[3];
+            setVisuals();
+            playAudio();
+        }
+
+        public void ChangeSongBack()
+        {
+            int N = songID + 1;
+            if (N == listSize){
+                N = 0;
+            }
+            MediaPlayerRegistry.currentPlayer.Stop();
+            MediaPlayerRegistry.currentPlayer.Release();
             _player = new MediaPlayer();
             songID = N;
             MediaPlayerRegistry.currentSong = songID;
