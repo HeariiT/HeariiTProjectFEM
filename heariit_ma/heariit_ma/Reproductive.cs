@@ -17,7 +17,7 @@ using Android.Graphics;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT Music")]
+    [Activity(Label = "HeariiT Player")]
     public class Reproductive : Activity, MediaController.IMediaPlayerControl, IOnTouchListener, IOnClickListener {
 
         MediaPlayer _player;

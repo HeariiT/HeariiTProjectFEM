@@ -13,7 +13,7 @@ using Android.Media;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT", MainLauncher = true)]
+    [Activity(Label = "HeariiT", MainLauncher = true, Icon = "@drawable/auriculares")]
     public class MainActivity : Activity {
         private int TRACK_Column, _ID_Column, DATA_Column, YEAR_Column, TITLE_Column;
         private int DURATION_Column, ALBUM_ID_Column, ALBUM_Column, ARTIST_Column;
