@@ -55,6 +55,7 @@ namespace heariit_ma
             //Se leen los elementos del Intent
             urlAlbum = this.Intent.GetStringExtra("urlAlbum");
             urlAudio = this.Intent.GetStringExtra("urlAudio");
+            //urlAudio = "https://en-support.files.wordpress.com/2014/10/istock_audio.wav";
             songID = this.Intent.GetIntExtra("songID", -1);
             title = this.Intent.GetStringExtra("songTitle");
             artist = this.Intent.GetStringExtra("songArtist");
@@ -123,7 +124,7 @@ namespace heariit_ma
         {
             if (imgUrlAlbum == null)
             {
-                imgAlbum.SetImageResource(Resource.Drawable.auriculares);
+                imgAlbum.SetImageResource(Resource.Drawable.icon);
 
             }
             else

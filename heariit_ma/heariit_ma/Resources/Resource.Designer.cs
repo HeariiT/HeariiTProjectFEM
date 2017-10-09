@@ -44,14 +44,11 @@ namespace heariit_ma
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int DarkBlue = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int actionBarBackgroundColor = 2131034112;
 			
-			// aapt resource value: 0x7f040001
-			public const int actionBarBackgroundColor = 2130968577;
-			
-			// aapt resource value: 0x7f040002
-			public const int actionBarTextColor = 2130968578;
+			// aapt resource value: 0x7f050001
+			public const int actionBarTextColor = 2131034113;
 			
 			static Color()
 			{
@@ -68,6 +65,9 @@ namespace heariit_ma
 			
 			// aapt resource value: 0x7f020000
 			public const int auriculares = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int icon = 2130837505;
 			
 			static Drawable()
 			{
@@ -153,8 +153,8 @@ namespace heariit_ma
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int app_name = 2131034112;
+			// aapt resource value: 0x7f040000
+			public const int app_name = 2130968576;
 			
 			static String()
 			{
