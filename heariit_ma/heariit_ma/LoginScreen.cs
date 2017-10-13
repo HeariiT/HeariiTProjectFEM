@@ -23,13 +23,14 @@ namespace heariit_ma
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LoginLayout);
-            Button login = FindViewById<Button>(Resource.Id.loginButtonSignIn);
+            Button signin = FindViewById<Button>(Resource.Id.loginButtonSignIn);
+            Button signup = FindViewById<Button>(Resource.Id.loginButtonSignUp);
             TextView email = FindViewById<TextView>(Resource.Id.loginEmailText);
             TextView pass = FindViewById<TextView>(Resource.Id.loginPasswordText);
 
             RESTManager manager = new RESTManager();
 
-            login.Click += delegate
+            signin.Click += delegate
             {
 
                 if (!Android.Util.Patterns.EmailAddress.Matcher(email.Text).Matches())
@@ -64,6 +65,13 @@ namespace heariit_ma
                     }
                 }
                 
+            };
+
+            signup.Click += delegate
+            {
+                var SignupScreen = new Intent(this, typeof(SignUpScreen));
+                this.StartActivity(SignupScreen);
+                this.Finish();
             };
         }
     }

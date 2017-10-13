@@ -38,15 +38,19 @@ namespace heariit_ma
         {
             return X_access_token == null ? false : true;
         }
-        
-        public KeyValuePair<string, RESTManager> SignIn(string Username, string Password)
+
+        /**
+         *  string - Es la cadena mostrada en los Toast como respuesta a la peticion
+         *  RESTManager - un objeto tipo RESTManager, se usa para realizar todas las peticiones
+        **/
+        public KeyValuePair<string, RESTManager> SignIn(string Email, string Password)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignIn, Method.POST);
-            //request.AddParameter("email", user.User.Email);
-            //request.AddParameter("password", user.User.Password);
-            request.AddParameter("email", "luergica2@gmail.com");
-            request.AddParameter("password", "12345678");
+            request.AddParameter("email", Email);
+            request.AddParameter("password", Password);
+            //request.AddParameter("email", "luergica2@gmail.com");
+            //request.AddParameter("password", "12345678");
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response
@@ -80,7 +84,51 @@ namespace heariit_ma
                 return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
             }
             return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
-        }   
-        
+        }
+
+        /**
+         *  List<string> - Lista de cadenas para ser mostradas en un Toast
+        **/
+        public KeyValuePair<List<string>, bool> SignUp( string email, string password, string username, string first_name, string last_name)
+        {
+            //Request method and parameters
+            var request = new RestRequest(UrlSignUp, Method.POST);
+            request.AddParameter("email", email);
+            request.AddParameter("password", password);
+            request.AddParameter("username", username);
+            request.AddParameter("first_name", first_name);
+            request.AddParameter("last_name", last_name);
+            //Headers
+            request.AddHeader("Content-Type", "application/json");
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                RootSignUpData user = null;
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign up (200)
+                {
+                    user = JsonConvert.DeserializeObject<RootSignUpData>(response.Content);
+                    List<string> oks = new List<string> { Application.Context.Resources.GetString(Resource.String.signup_message) };
+                    return new KeyValuePair<List<string>, bool>(oks, true);
+                }
+                else if (response.StatusCode.Equals(System.Net.HttpStatusCode.BadRequest)) //Bad Request (400)
+                {
+                    List<string> err = new List<string>(user.errors.full_messages);
+                    return new KeyValuePair<List<string>, bool>(err, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@SignUp method: " + ex.Message);
+                List<string> errors = new List<string> { "EXCEPION! " + Application.Context.Resources.GetString(Resource.String.bad_connection) };
+                return new KeyValuePair<List<string>, bool>(errors, false);
+            }
+            List<string> strings = new List<string> { Application.Context.Resources.GetString(Resource.String.unexpected_error) };
+            return new KeyValuePair<List<string>, bool>(strings, false);
+        }
+
+
+
     }
 }

@@ -37,4 +37,9 @@
         p1:layout_width="match_parent"
         p1:layout_height="wrap_content"
         p1:id="@+id/loginButtonSignIn" />
+    <Button
+        p1:text="Sign up"
+        p1:layout_width="match_parent"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/loginButtonSignUp" />
 </LinearLayout>

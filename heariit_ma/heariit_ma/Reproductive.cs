@@ -60,7 +60,6 @@ namespace heariit_ma
             title = this.Intent.GetStringExtra("songTitle");
             artist = this.Intent.GetStringExtra("songArtist");
             listSize = this.Intent.GetIntExtra("listSize", -1);
-            artist = CurrentUser.username;
 
             //Se Asignan los Titulos y Artista
             titleSong = FindViewById<TextView>(Resource.Id.reproductive_title);

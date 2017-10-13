@@ -72,11 +72,13 @@
     <Compile Include="models\AudioAdapter.cs" />
     <Compile Include="models\CurrentUser.cs" />
     <Compile Include="models\Datos.cs" />
+    <Compile Include="models\RootSignUpData.cs" />
     <Compile Include="models\RootUserData.cs" />
     <Compile Include="Reproductive.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="controllers\RESTManager.cs" />
+    <Compile Include="SignUpScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Anton.ttf" />
@@ -92,6 +94,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\LoginLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\SignUpLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
