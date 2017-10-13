@@ -180,6 +180,15 @@ namespace heariit_ma
 			// aapt resource value: 0x7f040000
 			public const int app_name = 2130968576;
 			
+			// aapt resource value: 0x7f040003
+			public const int bad_connection = 2130968579;
+			
+			// aapt resource value: 0x7f040002
+			public const int failed_credentials = 2130968578;
+			
+			// aapt resource value: 0x7f040001
+			public const int welcome_message = 2130968577;
+			
 			static String()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();

@@ -10,6 +10,7 @@ using Android.Database;
 using System;
 using Android.Content;
 using Android.Media;
+using Newtonsoft.Json;
 
 namespace heariit_ma
 {
@@ -21,10 +22,15 @@ namespace heariit_ma
         ListView listData;
         AudioAdapter audioAdapter;
         Intent current_intent;
+        string CurrentToken;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             current_intent = null;
             base.OnCreate(savedInstanceState);
+
+            CurrentToken = JsonConvert.DeserializeObject<string>(Intent.GetStringExtra("x-access-token"));
+
+            Console.WriteLine("El token es: " + CurrentToken);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);

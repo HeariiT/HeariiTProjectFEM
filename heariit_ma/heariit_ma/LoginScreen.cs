@@ -9,10 +9,12 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using heariit_ma.models;
+using Newtonsoft.Json;
 
 namespace heariit_ma
 {
-    [Activity(Label = "LoginScreen", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "HeariiT", MainLauncher = true, Icon = "@drawable/icon")]
     public class LoginScreen : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -20,9 +22,29 @@ namespace heariit_ma
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LoginLayout);
             Button login = FindViewById<Button>(Resource.Id.loginButtonSignIn);
-            login.Click += (object sender, EventArgs e) =>
+            TextView email = FindViewById<TextView>(Resource.Id.loginEmailText);
+            TextView pass = FindViewById<TextView>(Resource.Id.loginPasswordText);
+
+            RESTManager manager = new RESTManager();
+
+            login.Click += delegate
             {
-                Android.Widget.Toast.MakeText(this, "Login button for: " + Resource.Id.loginEmailText.ToString, Android.Widget.ToastLength.Short).Show();
+                var candidateUser = new User(email.Text, pass.Text);
+                var response = manager.SignIn(candidateUser);
+
+                if ( response.Value == null ) //No token, sign in failed
+                {
+                    Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+                }
+                else
+                {
+                    Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+
+                    var mainActivity = new Intent(this, typeof(MainActivity));
+                    mainActivity.PutExtra("x-access-token", JsonConvert.SerializeObject(response.Value));
+                    this.StartActivity(mainActivity);
+                    this.Finish();
+                }
             };
         }
     }

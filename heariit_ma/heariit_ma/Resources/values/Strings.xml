@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">heariit_ma</string>
+  <string name="welcome_message">Welcome to Heariit!</string>
+  <string name="failed_credentials">Invalid email or username, try again.</string>
+  <string name="bad_connection">Network is unreachable. Are you connected to Internet?</string>
 </resources>
