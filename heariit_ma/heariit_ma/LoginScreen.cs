@@ -29,8 +29,7 @@ namespace heariit_ma
 
             login.Click += delegate
             {
-                var candidateUser = new User(email.Text, pass.Text);
-                var response = manager.SignIn(candidateUser);
+                var response = manager.SignIn( email.Text, pass.Text );
 
                 if ( response.Value == null ) //No token, sign in failed
                 {
@@ -41,7 +40,7 @@ namespace heariit_ma
                     Toast.MakeText(this, response.Key, ToastLength.Long).Show();
 
                     var mainActivity = new Intent(this, typeof(MainActivity));
-                    mainActivity.PutExtra("x-access-token", JsonConvert.SerializeObject(response.Value));
+                    mainActivity.PutExtra("RESTManager", JsonConvert.SerializeObject(response.Value));
                     this.StartActivity(mainActivity);
                     this.Finish();
                 }
