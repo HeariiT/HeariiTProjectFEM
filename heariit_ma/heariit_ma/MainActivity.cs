@@ -31,7 +31,7 @@ namespace heariit_ma
             manager = JsonConvert.DeserializeObject<RESTManager>(Intent.GetStringExtra("RESTManager"));
 
             Console.WriteLine("El token es: " + manager.X_access_token);
-            Console.WriteLine("El username es: " + manager.user.data.username);
+            Console.WriteLine("El username es: " + CurrentUser.username);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);

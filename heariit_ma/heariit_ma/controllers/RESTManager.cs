@@ -26,7 +26,6 @@ namespace heariit_ma
         private const string UrlMyProfile = "/my";
 
         private RestClient client;
-        public RootUserData user { set; get; }
 
         public RESTManager()
         {
@@ -54,13 +53,21 @@ namespace heariit_ma
             try
             {
                 IRestResponse response = client.Execute(request);
-                user = JsonConvert.DeserializeObject<RootUserData>(response.Content);
                 
                 //IRestResponse<Data> response = client.Execute<Data>(request);
                 if(response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign in (200)
                 {
                     X_access_token = response.Headers.ToList().Find(x => x.Name == "x-access-token").Value.ToString();
-                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + user.data.first_name , this);
+                    RootUserData user = JsonConvert.DeserializeObject<RootUserData>(response.Content);
+                    
+                    CurrentUser.id = user.data.id;
+                    CurrentUser.email = user.data.email;
+                    CurrentUser.first_name = user.data.first_name;
+                    CurrentUser.last_name = user.data.last_name;
+                    CurrentUser.username = user.data.username;
+                    CurrentUser.x_access_token = X_access_token;
+
+                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name , this);
                 }
                 else if (response.StatusCode.Equals(System.Net.HttpStatusCode.Unauthorized)) //Unauthorized (401)
                 {

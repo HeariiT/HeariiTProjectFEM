@@ -13,7 +13,7 @@ using Android.Media;
 using static Android.Views.View;
 using Java.IO;
 using Android.Graphics;
-
+using heariit_ma.models;
 
 namespace heariit_ma
 {
@@ -60,7 +60,7 @@ namespace heariit_ma
             title = this.Intent.GetStringExtra("songTitle");
             artist = this.Intent.GetStringExtra("songArtist");
             listSize = this.Intent.GetIntExtra("listSize", -1);
-
+            artist = CurrentUser.username;
 
             //Se Asignan los Titulos y Artista
             titleSong = FindViewById<TextView>(Resource.Id.reproductive_title);
