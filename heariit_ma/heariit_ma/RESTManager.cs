@@ -26,12 +26,13 @@ namespace heariit_ma
         private const string UrlMyProfile = "/my";
 
         private RestClient client;
+        public RootUserData user { set; get; }
 
         public RESTManager()
         {
-            this.BackendAddress = "https://4d147f72-b6a3-4f80-a8ee-fb896184ecf5.mock.pstmn.io/";
-            this.X_access_token = null;
-            this.client = new RestClient(BackendAddress);
+            BackendAddress = "http://192.168.43.249:4000";
+            X_access_token = null;
+            client = new RestClient(BackendAddress);
         }
 
         public bool isActive()
@@ -39,34 +40,39 @@ namespace heariit_ma
             return X_access_token == null ? false : true;
         }
         
-        public KeyValuePair<string, string> SignIn(User user)
+        public KeyValuePair<string, RESTManager> SignIn(string Username, string Password)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignIn, Method.POST);
-            request.AddParameter("email", user.Email);
-            request.AddParameter("password", user.Password);
+            //request.AddParameter("email", user.User.Email);
+            //request.AddParameter("password", user.User.Password);
+            request.AddParameter("email", "luergica2@gmail.com");
+            request.AddParameter("password", "12345678");
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response
             try
             {
-                IRestResponse<User> response = client.Execute<User>(request);
+                IRestResponse response = client.Execute(request);
+                user = JsonConvert.DeserializeObject<RootUserData>(response.Content);
+                
+                //IRestResponse<Data> response = client.Execute<Data>(request);
                 if(response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign in (200)
                 {
                     X_access_token = response.Headers.ToList().Find(x => x.Name == "x-access-token").Value.ToString();
-                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.welcome_message) , X_access_token);
+                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + user.data.first_name , this);
                 }
                 else if (response.StatusCode.Equals(System.Net.HttpStatusCode.Unauthorized)) //Unauthorized (401)
                 {
-                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.failed_credentials), null );
+                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.failed_credentials), this );
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception at RESTManager@SignIn method: " + ex.Message);
-                return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
+                return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
             }
-            return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
+            return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
         }   
         
     }

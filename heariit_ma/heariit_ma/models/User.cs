@@ -14,28 +14,21 @@ using Newtonsoft.Json;
 
 namespace heariit_ma.models
 {
-    [Serializable]
-    public class User
+    public class Data
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Username { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int id { get; set; }
+        public string email { get; set; }
+        public string provider { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string username { get; set; }
+        public string uid { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime updated_at { get; set; }
+    }
 
-        public User( ) { }
-        public User( string Email, string Password )
-        {
-            this.Email = Email;
-            this.Password = Password;
-        }
-        public User(string Email, string Password, string Username, string FirstName, string LastName)
-        {
-            this.Email = Email;
-            this.Password = Password;
-            this.Username = Username;
-            this.FirstName = FirstName;
-            this.LastName = LastName;
-        }
+    public class RootUserData 
+    {
+        public Data data { get; set; }
     }
 }

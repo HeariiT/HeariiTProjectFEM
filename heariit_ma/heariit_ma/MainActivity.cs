@@ -22,15 +22,16 @@ namespace heariit_ma
         ListView listData;
         AudioAdapter audioAdapter;
         Intent current_intent;
-        string CurrentToken;
+        RESTManager manager;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             current_intent = null;
             base.OnCreate(savedInstanceState);
 
-            CurrentToken = JsonConvert.DeserializeObject<string>(Intent.GetStringExtra("x-access-token"));
+            manager = JsonConvert.DeserializeObject<RESTManager>(Intent.GetStringExtra("RESTManager"));
 
-            Console.WriteLine("El token es: " + CurrentToken);
+            Console.WriteLine("El token es: " + manager.X_access_token);
+            Console.WriteLine("El username es: " + manager.user.data.username);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
