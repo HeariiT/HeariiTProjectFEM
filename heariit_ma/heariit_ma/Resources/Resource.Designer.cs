@@ -183,6 +183,12 @@ namespace heariit_ma
 			// aapt resource value: 0x7f040003
 			public const int bad_connection = 2130968579;
 			
+			// aapt resource value: 0x7f040004
+			public const int bad_email = 2130968580;
+			
+			// aapt resource value: 0x7f040005
+			public const int empty_field = 2130968581;
+			
 			// aapt resource value: 0x7f040002
 			public const int failed_credentials = 2130968578;
 			

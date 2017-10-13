@@ -2,6 +2,10 @@
 <resources>
   <string name="app_name">heariit_ma</string>
   <string name="welcome_message">Welcome to Heariit!</string>
+  
+  <!-- Errors -->
   <string name="failed_credentials">Invalid email or username, try again.</string>
   <string name="bad_connection">Network is unreachable. Are you connected to Internet?</string>
+  <string name="bad_email">You must enter a valid email address.</string>
+  <string name="empty_field">must not be empty.</string>
 </resources>
