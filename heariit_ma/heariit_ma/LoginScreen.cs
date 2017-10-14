@@ -33,7 +33,7 @@ namespace heariit_ma
 
             base.OnCreate(savedInstanceState);
 
-            if (!string.IsNullOrEmpty(Stored_x_access_token) && manager.ValidToken(Stored_x_access_token) && false)
+            if (!string.IsNullOrEmpty(Stored_x_access_token) && manager.ValidToken(Stored_x_access_token) && true)
             {
                 var mainActivity = new Intent(this, typeof(MainActivity));
                 mainActivity.PutExtra("x-access-token", Stored_x_access_token);

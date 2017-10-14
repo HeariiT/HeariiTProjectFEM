@@ -17,8 +17,6 @@ namespace heariit_ma
 {
     [Activity(Label = "HeariiT")]
     public class MainActivity : Activity {
-        private int TRACK_Column, _ID_Column, DATA_Column, YEAR_Column, TITLE_Column;
-        private int DURATION_Column, ALBUM_ID_Column, ALBUM_Column, ARTIST_Column;
         List<Datos> items;
         ListView listData;
         AudioAdapter audioAdapter;
@@ -72,10 +70,8 @@ namespace heariit_ma
         }
 
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
-            /*int e = E.Position;
+            int e = E.Position;
             var item = this.audioAdapter.GetItemAtPosition(e);
-            var mySongs = listData;
-            System.Console.WriteLine(mySongs);
 
             String urlAlbum = item.ArtistAlbum;
             String urlAudio = item.ArrPath;
@@ -87,8 +83,6 @@ namespace heariit_ma
             if (e != MediaPlayerRegistry.currentSong) {
                 if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop();}
             }
-
-
             
             var intent = new Intent(this, typeof(Reproductive));
             intent.PutExtra("urlAlbum", urlAlbum);
@@ -97,8 +91,7 @@ namespace heariit_ma
             intent.PutExtra("songTitle", songTitle);
             intent.PutExtra("songArtist", songArtist);
             intent.PutExtra("listSize", items.Count);
-            this.StartActivity(intent);*/
-            Console.WriteLine("Tu Mamá");
+            this.StartActivity(intent);
         }
 
         public void setSongs(){
@@ -107,12 +100,13 @@ namespace heariit_ma
             
             var length = items.Count;
             for (int i = 0; i < length; i++){
-                String[] mu = new String[4];
+                String[] mu = new String[5];
                 var item = this.audioAdapter.GetItemAtPosition(i);
                 mu[0] = item.ArtistAlbum;
                 mu[1] = item.ArrPath;
                 mu[2] = item.Title;
                 mu[3] = item.Artist;
+                mu[4] = "";
                 myMusicList.Add(i, mu);
             }
             MediaPlayerRegistry.Songs = myMusicList;

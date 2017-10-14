@@ -13,6 +13,7 @@ using RestSharp;
 using heariit_ma.models;
 using Android.Content.Res;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace heariit_ma
 {
@@ -28,6 +29,7 @@ namespace heariit_ma
         private const string UrlValidateUsername = "/username";
         private const string UrlValidateToken = "/validate";
         private const string UrlMySongs = "/songs";
+        private const string UrlDownloadSongs = "/download/";
 
         private RestClient client;
 
@@ -215,6 +217,9 @@ namespace heariit_ma
             return false;
         }
 
+        /**
+         * Arreglo de objetos SongInfo
+        **/
         public SongInfo[] MySongs(){
 
             SongInfo[] MySongs;
@@ -233,20 +238,50 @@ namespace heariit_ma
                         return MySongs;
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Not Found");
-                }
                 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception at RESTManager@SignIn method: " + ex.Message);
+                Console.WriteLine("Exception at RESTManager@MySongs method: " + ex.Message);
             }
-
-            Console.WriteLine("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             return new SongInfo[0];
 
+        }
+
+
+        public string getASong(string id) {
+            string SongDownload = UrlDownloadSongs + id;
+            string Filename = null;
+            var request = new RestRequest(SongDownload, Method.GET);
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                Console.WriteLine("AAAAAAAAAAAAAAAAAAAA");
+                Console.WriteLine(response.StatusCode);
+                Console.WriteLine("BBBBBBBBBBBBBBBBBBBB");
+                Console.WriteLine(response.Headers);
+                Console.WriteLine("CCCCCCCCCCCCCCCCCCCC");
+                Console.WriteLine(response.Content);
+                Console.WriteLine("DDDDDDDDDDDDDDDDDDDD");
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    Filename = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".mp3";
+                    byte[] bytes = response.RawBytes;
+                    File.WriteAllBytes(Filename, bytes);
+                    return Filename;
+                }
+                else
+                {
+                    Console.WriteLine("NO SE PUDO LPTM");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@getASong method: " + ex.Message);
+            }
+            return null;
         }
 
     }
