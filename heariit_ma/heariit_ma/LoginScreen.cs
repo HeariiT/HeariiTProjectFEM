@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using heariit_ma.models;
 using Newtonsoft.Json;
+using Android.Preferences;
 
 namespace heariit_ma
 {
@@ -21,58 +22,76 @@ namespace heariit_ma
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.LoginLayout);
-            Button signin = FindViewById<Button>(Resource.Id.loginButtonSignIn);
-            Button signup = FindViewById<Button>(Resource.Id.loginButtonSignUp);
-            TextView email = FindViewById<TextView>(Resource.Id.loginEmailText);
-            TextView pass = FindViewById<TextView>(Resource.Id.loginPasswordText);
 
             RESTManager manager = new RESTManager();
+            /**
+             * Intenta recuperar un string guardado localmente, corresponde al token de sesion
+             * si es valido, dirige al mainactivity, si no, al login.
+             * **/
+            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(Application.Context);
+            string Stored_x_access_token = prefs.GetString("x-access-token", null);
 
-            signin.Click += delegate
+            base.OnCreate(savedInstanceState);
+
+            if (!string.IsNullOrEmpty(Stored_x_access_token) && manager.ValidToken(Stored_x_access_token) && false)
             {
+                var mainActivity = new Intent(this, typeof(MainActivity));
+                mainActivity.PutExtra("x-access-token", Stored_x_access_token);
+                this.StartActivity(mainActivity);
+                this.Finish();
+            }
+            else
+            {
+                SetContentView(Resource.Layout.LoginLayout);
+                Button signin = FindViewById<Button>(Resource.Id.loginButtonSignIn);
+                Button signup = FindViewById<Button>(Resource.Id.loginButtonSignUp);
+                TextView email = FindViewById<TextView>(Resource.Id.loginEmailText);
+                TextView pass = FindViewById<TextView>(Resource.Id.loginPasswordText);
 
-                if (!Android.Util.Patterns.EmailAddress.Matcher(email.Text).Matches())
+                signin.Click += delegate
                 {
-                    Toast.MakeText(this, Application.Context.Resources.GetString(Resource.String.bad_email), ToastLength.Long).Show();
-                }
-                else if (string.IsNullOrEmpty(pass.Text))
-                {
-                    Toast.MakeText(this, "Password: " + Application.Context.Resources.GetString(Resource.String.empty_field), ToastLength.Long).Show();
-                }
-                else
-                {
-                    Validated = true;
-                }
 
-                if ( Validated )
-                {
-                    var response = manager.SignIn(email.Text, pass.Text);
-
-                    if (response.Value == null) //No token, sign in failed
+                    if (!Android.Util.Patterns.EmailAddress.Matcher(email.Text).Matches())
                     {
-                        Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+                        Toast.MakeText(this, Application.Context.Resources.GetString(Resource.String.bad_email), ToastLength.Long).Show();
+                    }
+                    else if (string.IsNullOrEmpty(pass.Text))
+                    {
+                        Toast.MakeText(this, "Password: " + Application.Context.Resources.GetString(Resource.String.empty_field), ToastLength.Long).Show();
                     }
                     else
                     {
-                        Toast.MakeText(this, response.Key, ToastLength.Long).Show();
-
-                        var mainActivity = new Intent(this, typeof(MainActivity));
-                        mainActivity.PutExtra("RESTManager", JsonConvert.SerializeObject(response.Value));
-                        this.StartActivity(mainActivity);
-                        this.Finish();
+                        Validated = true;
                     }
-                }
-                
-            };
 
-            signup.Click += delegate
-            {
-                var SignupScreen = new Intent(this, typeof(SignUpScreen));
-                this.StartActivity(SignupScreen);
-                this.Finish();
-            };
+                    if (Validated)
+                    {
+                        var response = manager.SignIn(email.Text, pass.Text);
+
+                        if (response.Value == null) //No token, sign in failed
+                        {
+                            Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+                        }
+                        else
+                        {
+                            Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+
+                            var mainActivity = new Intent(this, typeof(MainActivity));
+                            mainActivity.PutExtra("x-access-token", response.Value);
+                            this.StartActivity(mainActivity);
+                            this.Finish();
+                        }
+                    }
+
+                };
+
+                signup.Click += delegate
+                {
+                    var SignupScreen = new Intent(this, typeof(SignUpScreen));
+                    this.StartActivity(SignupScreen);
+                    this.Finish();
+                };
+            }
         }
     }
 }

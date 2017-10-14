@@ -11,6 +11,7 @@ using System;
 using Android.Content;
 using Android.Media;
 using Newtonsoft.Json;
+using Android.Preferences;
 
 namespace heariit_ma
 {
@@ -22,13 +23,20 @@ namespace heariit_ma
         ListView listData;
         AudioAdapter audioAdapter;
         Intent current_intent;
-        RESTManager manager;
+        RESTManager manager = new RESTManager();
 
         protected override void OnCreate(Bundle savedInstanceState) {
             current_intent = null;
             base.OnCreate(savedInstanceState);
 
-            manager = JsonConvert.DeserializeObject<RESTManager>(Intent.GetStringExtra("RESTManager"));
+            manager.X_access_token = Intent.GetStringExtra("x-access-token");
+            /**
+             * Guardar el token en el almacenamiento del telefono, para no tener que hacer
+             * login de nuevo cuando se cierra la app
+            **/
+            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences (Application.Context);
+            ISharedPreferencesEditor editor = prefs.Edit();
+            editor.PutString("x-access-token", manager.X_access_token).Apply();
 
             Console.WriteLine("El token es: " + manager.X_access_token);
             Console.WriteLine("El username es: " + CurrentUser.username);

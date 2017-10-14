@@ -26,6 +26,7 @@ namespace heariit_ma
         private const string UrlMyProfile = "/my";
         private const string UrlValidateEmail = "/email";
         private const string UrlValidateUsername = "/username";
+        private const string UrlValidateToken = "/validate";
 
         private RestClient client;
 
@@ -43,9 +44,9 @@ namespace heariit_ma
 
         /**
          *  string - Es la cadena mostrada en los Toast como respuesta a la peticion
-         *  RESTManager - un objeto tipo RESTManager, se usa para realizar todas las peticiones
+         *  string - es el x-access-token, se usa para realizar todas las peticiones
         **/
-        public KeyValuePair<string, RESTManager> SignIn(string Email, string Password)
+        public KeyValuePair<string, string> SignIn(string Email, string Password)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignIn, Method.POST);
@@ -73,19 +74,19 @@ namespace heariit_ma
                     CurrentUser.username = user.data.username;
                     CurrentUser.x_access_token = X_access_token;
 
-                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name , this);
+                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name , X_access_token);
                 }
                 else if (response.StatusCode.Equals(System.Net.HttpStatusCode.Unauthorized)) //Unauthorized (401)
                 {
-                    return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.failed_credentials), this );
+                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.failed_credentials), null );
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception at RESTManager@SignIn method: " + ex.Message);
-                return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
+                return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
             }
-            return new KeyValuePair<string, RESTManager>( Application.Context.Resources.GetString(Resource.String.bad_connection), this);
+            return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
         }
 
         /**
@@ -173,6 +174,34 @@ namespace heariit_ma
                 IRestResponse response = client.Execute(request);
 
                 if (response.StatusCode.Equals(System.Net.HttpStatusCode.NotFound)) //Bad Request (400)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@ValidateUsername method: " + ex.Message);
+                return false;
+            }
+            return false;
+        }
+
+        /**
+         * bool - verdadero si el token suministrado es valido
+        **/
+        public bool ValidToken(string Token)
+        {
+            //Request method and parameters
+            var request = new RestRequest(UrlValidateToken, Method.POST);
+            //Headers
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("x-access-token", Token);
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Ok (200)
                 {
                     return true;
                 }
