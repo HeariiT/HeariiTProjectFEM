@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">heariit_ma</string>
+  <string name="welcome_message">Welcome back, </string>
+  <string name="signup_message">Welcome to HeariiT!</string>
+  
+  <!-- Errors -->
+  <string name="unexpected_error">Unexpected error.</string>
+  <string name="failed_credentials">Invalid email or username, try again.</string>
+  <string name="bad_connection">Network is unreachable. Are you connected to Internet?</string>
+  <string name="bad_email">You must enter a valid email address.</string>
+  <string name="empty_field">must not be empty.</string>
+  <string name="error_password_not_equal">Passwords are not equal.</string>
+  <string name="error_not_available">has already been registered.</string>
+  <string name="warning_not_songs">You do not have any songs.</string>
 </resources>

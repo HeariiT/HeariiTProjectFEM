@@ -13,7 +13,7 @@ using Android.Media;
 using static Android.Views.View;
 using Java.IO;
 using Android.Graphics;
-
+using heariit_ma.models;
 
 namespace heariit_ma
 {
@@ -32,18 +32,21 @@ namespace heariit_ma
         String urlAudio;
         string title;
         string artist;
+        RESTManager manager;
 
-        public int AudioSessionId{get { return 0;}}
-        public int BufferPercentage { get { return _player.CurrentPosition *100 /_player.Duration; } }
-        public int CurrentPosition {get { return _player.CurrentPosition; } }
-        public int Duration {get { return _player.Duration; } }
-        public bool IsPlaying {get { return _player.IsPlaying; } }
+        public int AudioSessionId { get { return 0; } }
+        public int BufferPercentage { get { return _player.CurrentPosition * 100 / _player.Duration; } }
+        public int CurrentPosition { get { return _player.CurrentPosition; } }
+        public int Duration { get { return _player.Duration; } }
+        public bool IsPlaying { get { return _player.IsPlaying; } }
 
-       
+
 
 
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
+            manager = new RESTManager();
+
             SetContentView(Resource.Layout.Reproductive);
             linearLayout = FindViewById<LinearLayout>(Resource.Id.linearLayout);
             imgAlbum = FindViewById<ImageView>(Resource.Id.imageView_Album);
@@ -55,18 +58,18 @@ namespace heariit_ma
             //Se leen los elementos del Intent
             urlAlbum = this.Intent.GetStringExtra("urlAlbum");
             urlAudio = this.Intent.GetStringExtra("urlAudio");
-            //urlAudio = "https://en-support.files.wordpress.com/2014/10/istock_audio.wav";
             songID = this.Intent.GetIntExtra("songID", -1);
             title = this.Intent.GetStringExtra("songTitle");
             artist = this.Intent.GetStringExtra("songArtist");
             listSize = this.Intent.GetIntExtra("listSize", -1);
 
-
             //Se Asignan los Titulos y Artista
             titleSong = FindViewById<TextView>(Resource.Id.reproductive_title);
             artistSong = FindViewById<TextView>(Resource.Id.reproductive_artist);
+            setUrl();
 
-            
+
+            //Se busca la canción.
 
 
             //Establecer los elementos visuales
@@ -74,16 +77,30 @@ namespace heariit_ma
 
 
             //Si la canción ya está siendo escuchada, me la continua y no me la reniciia.
-            
-            if (songID == MediaPlayerRegistry.currentSong){
+
+            if (songID == MediaPlayerRegistry.currentSong) {
                 _player = MediaPlayerRegistry.currentPlayer;
                 continueAudio();
-            }else{
+            } else {
                 MediaPlayerRegistry.currentPlayer.Stop();
                 playAudio();
                 MediaPlayerRegistry.currentSong = songID;
             }
-            
+
+        }
+
+        private void setUrl()
+        {
+            string currentPath = MediaPlayerRegistry.Songs[songID][4];
+            if (currentPath.Equals(""))
+            {
+                urlAudio = manager.getASong(urlAudio);
+                MediaPlayerRegistry.Songs[songID][4] = urlAudio;
+            }
+            else
+            {
+                urlAudio = MediaPlayerRegistry.Songs[songID][4];
+            }
         }
 
         private void setVisuals() {
@@ -154,6 +171,7 @@ namespace heariit_ma
             String[] NewSong = MediaPlayerRegistry.Songs[N];
             urlAlbum = NewSong[0];
             urlAudio = NewSong[1];
+            setUrl();
             title = NewSong[2];
             artist = NewSong[3];
             setVisuals();
@@ -174,6 +192,7 @@ namespace heariit_ma
             String[] NewSong = MediaPlayerRegistry.Songs[N];
             urlAlbum = NewSong[0];
             urlAudio = NewSong[1];
+            setUrl();
             title = NewSong[2];
             artist = NewSong[3];
             setVisuals();

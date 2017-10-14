@@ -12,12 +12,15 @@ using Android.Widget;
 
 namespace heariit_ma.models
 {
-    public class Datos
+    public class Errors
+    {        
+        public List<string> full_messages { get; set; }
+    }
+
+    public class RootSignUpData
     {
-        public string Id {get; set;}
-        public string Title {get; set;}
-        public string Artist {get; set;}
-        public string ArrPath {get; set;}
-        public string ArtistAlbum {get; set;}
+        public string status { get; set; }
+        public Data data { get; set; }
+        public Errors errors { get; set; }
     }
 }
