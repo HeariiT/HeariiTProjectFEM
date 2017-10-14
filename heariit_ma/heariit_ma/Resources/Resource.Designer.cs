@@ -31,6 +31,18 @@ namespace heariit_ma
 		public partial class Attribute
 		{
 			
+			// aapt resource value: 0x7f010000
+			public const int layoutManager = 2130771968;
+			
+			// aapt resource value: 0x7f010002
+			public const int reverseLayout = 2130771970;
+			
+			// aapt resource value: 0x7f010001
+			public const int spanCount = 2130771969;
+			
+			// aapt resource value: 0x7f010003
+			public const int stackFromEnd = 2130771971;
+			
 			static Attribute()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -44,11 +56,11 @@ namespace heariit_ma
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int actionBarBackgroundColor = 2131034112;
+			// aapt resource value: 0x7f070000
+			public const int actionBarBackgroundColor = 2131165184;
 			
-			// aapt resource value: 0x7f050001
-			public const int actionBarTextColor = 2131034113;
+			// aapt resource value: 0x7f070001
+			public const int actionBarTextColor = 2131165185;
 			
 			static Color()
 			{
@@ -56,6 +68,28 @@ namespace heariit_ma
 			}
 			
 			private Color()
+			{
+			}
+		}
+		
+		public partial class Dimension
+		{
+			
+			// aapt resource value: 0x7f040000
+			public const int item_touch_helper_max_drag_scroll_per_frame = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int item_touch_helper_swipe_escape_max_velocity = 2130968577;
+			
+			// aapt resource value: 0x7f040002
+			public const int item_touch_helper_swipe_escape_velocity = 2130968578;
+			
+			static Dimension()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Dimension()
 			{
 			}
 		}
@@ -82,89 +116,116 @@ namespace heariit_ma
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070004
-			public const int artist = 2131165188;
+			// aapt resource value: 0x7f050005
+			public const int artist = 2131034117;
 			
-			// aapt resource value: 0x7f070001
-			public const int imageView1 = 2131165185;
+			// aapt resource value: 0x7f050002
+			public const int imageView1 = 2131034114;
 			
-			// aapt resource value: 0x7f070012
-			public const int imageView_Album = 2131165202;
+			// aapt resource value: 0x7f050014
+			public const int imageView_Album = 2131034132;
 			
-			// aapt resource value: 0x7f07000f
-			public const int linearLayout = 2131165199;
+			// aapt resource value: 0x7f050000
+			public const int item_touch_helper_previous_elevation = 2131034112;
 			
-			// aapt resource value: 0x7f070002
-			public const int linearLayout1 = 2131165186;
+			// aapt resource value: 0x7f050011
+			public const int linearLayout = 2131034129;
 			
-			// aapt resource value: 0x7f070005
-			public const int linearLayout2 = 2131165189;
+			// aapt resource value: 0x7f050003
+			public const int linearLayout1 = 2131034115;
 			
-			// aapt resource value: 0x7f07000e
-			public const int listView1 = 2131165198;
+			// aapt resource value: 0x7f050006
+			public const int linearLayout2 = 2131034118;
 			
-			// aapt resource value: 0x7f07000c
-			public const int loginButtonSignIn = 2131165196;
+			// aapt resource value: 0x7f05000f
+			public const int listView1 = 2131034127;
 			
-			// aapt resource value: 0x7f07000d
-			public const int loginButtonSignUp = 2131165197;
+			// aapt resource value: 0x7f05000d
+			public const int loginButtonSignIn = 2131034125;
 			
-			// aapt resource value: 0x7f070009
-			public const int loginEmailText = 2131165193;
+			// aapt resource value: 0x7f05000e
+			public const int loginButtonSignUp = 2131034126;
 			
-			// aapt resource value: 0x7f070006
-			public const int loginLinearLayout = 2131165190;
+			// aapt resource value: 0x7f05000a
+			public const int loginEmailText = 2131034122;
 			
-			// aapt resource value: 0x7f07000b
-			public const int loginPasswordText = 2131165195;
+			// aapt resource value: 0x7f050007
+			public const int loginLinearLayout = 2131034119;
 			
-			// aapt resource value: 0x7f070000
-			public const int relativeLayout1 = 2131165184;
+			// aapt resource value: 0x7f05000c
+			public const int loginPasswordText = 2131034124;
 			
-			// aapt resource value: 0x7f070011
-			public const int reproductive_artist = 2131165201;
+			// aapt resource value: 0x7f050010
+			public const int mainUploadBtn = 2131034128;
 			
-			// aapt resource value: 0x7f070010
-			public const int reproductive_title = 2131165200;
+			// aapt resource value: 0x7f050001
+			public const int relativeLayout1 = 2131034113;
 			
-			// aapt resource value: 0x7f07001b
-			public const int signupBackBtn = 2131165211;
+			// aapt resource value: 0x7f050013
+			public const int reproductive_artist = 2131034131;
 			
-			// aapt resource value: 0x7f07001a
-			public const int signupClearBtn = 2131165210;
+			// aapt resource value: 0x7f050012
+			public const int reproductive_title = 2131034130;
 			
-			// aapt resource value: 0x7f070016
-			public const int signupEmailText = 2131165206;
+			// aapt resource value: 0x7f05001d
+			public const int signupBackBtn = 2131034141;
 			
-			// aapt resource value: 0x7f070013
-			public const int signupFirstNameText = 2131165203;
+			// aapt resource value: 0x7f05001c
+			public const int signupClearBtn = 2131034140;
 			
-			// aapt resource value: 0x7f070014
-			public const int signupLastNameText = 2131165204;
+			// aapt resource value: 0x7f050018
+			public const int signupEmailText = 2131034136;
 			
-			// aapt resource value: 0x7f070017
-			public const int signupPasswordText1 = 2131165207;
+			// aapt resource value: 0x7f050015
+			public const int signupFirstNameText = 2131034133;
 			
-			// aapt resource value: 0x7f070018
-			public const int signupPasswordText2 = 2131165208;
+			// aapt resource value: 0x7f050016
+			public const int signupLastNameText = 2131034134;
 			
-			// aapt resource value: 0x7f070019
-			public const int signupSignUpBtn = 2131165209;
+			// aapt resource value: 0x7f050019
+			public const int signupPasswordText1 = 2131034137;
 			
-			// aapt resource value: 0x7f070015
-			public const int signupUsernameText = 2131165205;
+			// aapt resource value: 0x7f05001a
+			public const int signupPasswordText2 = 2131034138;
 			
-			// aapt resource value: 0x7f070007
-			public const int textView1 = 2131165191;
+			// aapt resource value: 0x7f05001b
+			public const int signupSignUpBtn = 2131034139;
 			
-			// aapt resource value: 0x7f070008
-			public const int textView2 = 2131165192;
+			// aapt resource value: 0x7f050017
+			public const int signupUsernameText = 2131034135;
 			
-			// aapt resource value: 0x7f07000a
-			public const int textView3 = 2131165194;
+			// aapt resource value: 0x7f050008
+			public const int textView1 = 2131034120;
 			
-			// aapt resource value: 0x7f070003
-			public const int title = 2131165187;
+			// aapt resource value: 0x7f050009
+			public const int textView2 = 2131034121;
+			
+			// aapt resource value: 0x7f05000b
+			public const int textView3 = 2131034123;
+			
+			// aapt resource value: 0x7f05001e
+			public const int textView4 = 2131034142;
+			
+			// aapt resource value: 0x7f050004
+			public const int title = 2131034116;
+			
+			// aapt resource value: 0x7f050021
+			public const int uploadAlbumText = 2131034145;
+			
+			// aapt resource value: 0x7f050020
+			public const int uploadAuthorText = 2131034144;
+			
+			// aapt resource value: 0x7f050024
+			public const int uploadBackBtn = 2131034148;
+			
+			// aapt resource value: 0x7f050022
+			public const int uploadPickerBtn = 2131034146;
+			
+			// aapt resource value: 0x7f05001f
+			public const int uploadTitleText = 2131034143;
+			
+			// aapt resource value: 0x7f050023
+			public const int uploadUploadBtn = 2131034147;
 			
 			static Id()
 			{
@@ -194,6 +255,9 @@ namespace heariit_ma
 			// aapt resource value: 0x7f030004
 			public const int SignUpLayout = 2130903044;
 			
+			// aapt resource value: 0x7f030005
+			public const int UploadLayout = 2130903045;
+			
 			static Layout()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -207,38 +271,38 @@ namespace heariit_ma
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int app_name = 2130968576;
+			// aapt resource value: 0x7f060000
+			public const int app_name = 2131099648;
 			
-			// aapt resource value: 0x7f040005
-			public const int bad_connection = 2130968581;
+			// aapt resource value: 0x7f060005
+			public const int bad_connection = 2131099653;
 			
-			// aapt resource value: 0x7f040006
-			public const int bad_email = 2130968582;
+			// aapt resource value: 0x7f060006
+			public const int bad_email = 2131099654;
 			
-			// aapt resource value: 0x7f040007
-			public const int empty_field = 2130968583;
+			// aapt resource value: 0x7f060007
+			public const int empty_field = 2131099655;
 			
-			// aapt resource value: 0x7f040009
-			public const int error_not_available = 2130968585;
+			// aapt resource value: 0x7f060009
+			public const int error_not_available = 2131099657;
 			
-			// aapt resource value: 0x7f040008
-			public const int error_password_not_equal = 2130968584;
+			// aapt resource value: 0x7f060008
+			public const int error_password_not_equal = 2131099656;
 			
-			// aapt resource value: 0x7f040004
-			public const int failed_credentials = 2130968580;
+			// aapt resource value: 0x7f060004
+			public const int failed_credentials = 2131099652;
 			
-			// aapt resource value: 0x7f040002
-			public const int signup_message = 2130968578;
+			// aapt resource value: 0x7f060002
+			public const int signup_message = 2131099650;
 			
-			// aapt resource value: 0x7f040003
-			public const int unexpected_error = 2130968579;
+			// aapt resource value: 0x7f060003
+			public const int unexpected_error = 2131099651;
 			
-			// aapt resource value: 0x7f04000a
-			public const int warning_not_songs = 2130968586;
+			// aapt resource value: 0x7f06000a
+			public const int warning_not_songs = 2131099658;
 			
-			// aapt resource value: 0x7f040001
-			public const int welcome_message = 2130968577;
+			// aapt resource value: 0x7f060001
+			public const int welcome_message = 2131099649;
 			
 			static String()
 			{
@@ -253,14 +317,14 @@ namespace heariit_ma
 		public partial class Style
 		{
 			
-			// aapt resource value: 0x7f060000
-			public const int MyAppTheme = 2131099648;
+			// aapt resource value: 0x7f080000
+			public const int MyAppTheme = 2131230720;
 			
-			// aapt resource value: 0x7f060002
-			public const int MyTheme_ActionBar_TitleTextStyle = 2131099650;
+			// aapt resource value: 0x7f080002
+			public const int MyTheme_ActionBar_TitleTextStyle = 2131230722;
 			
-			// aapt resource value: 0x7f060001
-			public const int MyTheme_ActionBarStyle = 2131099649;
+			// aapt resource value: 0x7f080001
+			public const int MyTheme_ActionBarStyle = 2131230721;
 			
 			static Style()
 			{
@@ -268,6 +332,45 @@ namespace heariit_ma
 			}
 			
 			private Style()
+			{
+			}
+		}
+		
+		public partial class Styleable
+		{
+			
+			public static int[] RecyclerView = new int[] {
+					16842948,
+					16842993,
+					2130771968,
+					2130771969,
+					2130771970,
+					2130771971};
+			
+			// aapt resource value: 1
+			public const int RecyclerView_android_descendantFocusability = 1;
+			
+			// aapt resource value: 0
+			public const int RecyclerView_android_orientation = 0;
+			
+			// aapt resource value: 2
+			public const int RecyclerView_layoutManager = 2;
+			
+			// aapt resource value: 4
+			public const int RecyclerView_reverseLayout = 4;
+			
+			// aapt resource value: 3
+			public const int RecyclerView_spanCount = 3;
+			
+			// aapt resource value: 5
+			public const int RecyclerView_stackFromEnd = 5;
+			
+			static Styleable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Styleable()
 			{
 			}
 		}

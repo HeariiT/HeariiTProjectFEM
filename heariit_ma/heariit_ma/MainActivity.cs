@@ -15,7 +15,7 @@ using Android.Preferences;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT")]
+    [Activity(Label = "HeariiT", Icon = "@drawable/icon")]
     public class MainActivity : Activity {
         List<Datos> items;
         ListView listData;
@@ -59,13 +59,22 @@ namespace heariit_ma
                 Toast.MakeText(this, Application.Resources.GetString(Resource.String.warning_not_songs), ToastLength.Long).Show();
             }
             SetContentView(Resource.Layout.Main);
-            
+            Button uploadBtn = FindViewById<Button>(Resource.Id.mainUploadBtn);
+
             listData = FindViewById<ListView>(Resource.Id.listView1);
             items = new List<Datos>();
 
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
                 => listView_ItemClick(sender, args);
             audioCursor();
+
+            uploadBtn.Click += delegate
+            {
+                var UploadActivity = new Intent(this, typeof(Uploader));
+                UploadActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+                this.StartActivity(UploadActivity);
+                this.Finish();
+            };
             
         }
 
