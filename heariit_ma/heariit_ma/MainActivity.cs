@@ -21,6 +21,9 @@ namespace heariit_ma
         ListView listData;
         AudioAdapter audioAdapter;
         Intent current_intent;
+        string jsonList;
+        SongInfo[] MySongs;
+        int MySongsSize = 0;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             current_intent = null;
@@ -28,8 +31,25 @@ namespace heariit_ma
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
+
+            RESTManager manager = new RESTManager();
+            jsonList = manager.GET();
+
+            if (jsonList != null){
+                MySongs=Newtonsoft.Json.JsonConvert.DeserializeObject<SongInfo[]>(jsonList);
+            }
+            else
+            {
+                MySongs = new SongInfo[0];
+            }
+
+
+            MySongsSize = MySongs.Length;
+
             listData = FindViewById<ListView>(Resource.Id.listView1);
             items = new List<Datos>();
+
+        
             if ((int)Build.VERSION.SdkInt >= 23) {
                 if ((CheckSelfPermission(
                     Manifest.Permission.ReadExternalStorage) != (int)Permission.Granted)
@@ -43,19 +63,22 @@ namespace heariit_ma
                 }
             }
             
-            listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
-                => listView_ItemClick(sender, args);
+            //listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
+            //    => listView_ItemClick(sender, args);
             audioCursor();
             
         }
 
+
+        /*
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
             int e = E.Position;
-            var item = this.audioAdapter.GetItemAtPosition(e);
+            var item = MySongs[e];
+
             var mySongs = listData;
             System.Console.WriteLine(mySongs);
 
-            String urlAlbum = item.ArtistAlbum;
+            String urlAlbum = null;
             String urlAudio = item.ArrPath;
             String songTitle = item.Title;
             String songArtist = item.Artist;
@@ -81,67 +104,45 @@ namespace heariit_ma
             intent.PutExtra("listSize", items.Count);
             current_intent = intent;
             this.StartActivity(current_intent);
-        }
+        }*/
 
         public void setSongs(){
 
             Dictionary<int, String[]> myMusicList = new Dictionary<int, String[]>();
             
-            var length = items.Count;
-            for (int i = 0; i < length; i++){
+            
+            for (int i = 0; i < MySongsSize; i++){
                 String[] mu = new String[4];
-                var item = this.audioAdapter.GetItemAtPosition(i);
-                mu[0] = item.ArtistAlbum;
-                mu[1] = item.ArrPath;
-                mu[2] = item.Title;
-                mu[3] = item.Artist;
+                var item = MySongs[i];
+                mu[0] = null;
+                mu[1] = item.ur;
+                mu[2] = item.title;
+                mu[3] = item.author;
                 myMusicList.Add(i, mu);
             }
             MediaPlayerRegistry.Songs = myMusicList;
         }
 
         private void audioCursor(){
-            string[] information = {
-                MediaStore.Audio.Media.InterfaceConsts.Id,
-                MediaStore.Audio.Media.InterfaceConsts.Data,
-                MediaStore.Audio.Media.InterfaceConsts.Track,
-                MediaStore.Audio.Media.InterfaceConsts.Year,
-                MediaStore.Audio.Media.InterfaceConsts.Duration,
-                MediaStore.Audio.Media.InterfaceConsts.AlbumId,
-                MediaStore.Audio.Media.InterfaceConsts.Album,
-                MediaStore.Audio.Media.InterfaceConsts.AlbumKey,
-                MediaStore.Audio.Media.InterfaceConsts.Title,
-                MediaStore.Audio.Media.InterfaceConsts.TitleKey,
-                MediaStore.Audio.Media.InterfaceConsts.ArtistId,
-                MediaStore.Audio.Media.InterfaceConsts.Artist
-            };
-            string orderBy = MediaStore.Audio.Media.InterfaceConsts.Title;
-            ICursor audioCursor = ContentResolver.Query(
-                MediaStore.Audio.Media.ExternalContentUri, information, null,
-                null, orderBy);
 
-            _ID_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Id);
-            DATA_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Data);
-            YEAR_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Year);
-            DURATION_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Duration);
-            ALBUM_ID_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.AlbumId);
-            ALBUM_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Album);
-            TRACK_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Track);
-            TITLE_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Title);
-            ARTIST_Column = audioCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.Artist);
-            while (audioCursor.MoveToNext()){
-                var audioTitle = audioCursor.GetString(TITLE_Column);
-                var artist = audioCursor.GetString(ARTIST_Column);
-                var time = audioCursor.GetString(DURATION_Column);
+            for (int i = 0; i < MySongsSize; i++)
+            {
+                var audioTitle = MySongs[i].title;
+                var artist = MySongs[i].author;
+                var time = "0";
                 string timestring = convertDuration(Convert.ToInt32(time));
-                var arrPath = audioCursor.GetString(DATA_Column);
-                var artistAlbum = audioCursor.GetString(ALBUM_ID_Column);
-                String urlAlbum = urlAlbumArt(artistAlbum);
-                items.Add(new Datos() { Title = audioTitle, Artist = artist, Time=timestring, ArrPath = arrPath,
-                                        ArtistAlbum=urlAlbum});
+                var arrPath = (MySongs[i].id).ToString();
+                var urlAlbum = "";
+                //String urlAlbum = urlAlbumArt(artistAlbum);
+                items.Add(new Datos()
+                {
+                    Title = audioTitle,
+                    Artist = artist,
+                    Time = timestring,
+                    ArrPath = arrPath,
+                    ArtistAlbum = urlAlbum
+                });
             }
-
-            audioCursor.Close();
             listData.Adapter = audioAdapter = new AudioAdapter(this, items);
             setSongs();
         }
