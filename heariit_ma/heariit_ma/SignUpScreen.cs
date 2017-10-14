@@ -15,7 +15,7 @@ namespace heariit_ma
     [Activity(Label = "HeariiT")]
     public class SignUpScreen : Activity
     {
-        private bool Validated = true;
+        RESTManager manager = new RESTManager();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -35,36 +35,27 @@ namespace heariit_ma
 
             SignupButton.Click += delegate
             {
-                if (!Android.Util.Patterns.EmailAddress.Matcher(Email.Text).Matches())
-                {
-                    Toast.MakeText(this, Application.Context.Resources.GetString(Resource.String.bad_email), ToastLength.Long).Show();
-                }
-                else if (Password1.Text != Password2.Text)
-                {
-                    Toast.MakeText(this, "Password: " + Application.Context.Resources.GetString(Resource.String.error_password_not_equal), ToastLength.Long).Show();
-                }
-                else
-                {
-                    Validated = true;
-                }
+                KeyValuePair<string, bool> Validator = ValidateFields(Email.Text, Password1.Text, Password2.Text, Username.Text, FirstName.Text, LastName.Text);
 
-                if (Validated)
+                if ( Validator.Value ) //Campos correctos
                 {
-                    RESTManager manager = new RESTManager();
                     var response = manager.SignUp(Email.Text, Password1.Text, Username.Text, FirstName.Text, LastName.Text);
 
-                    if ( !response.Value ) //Fallo la creacion de usuario
+                    if ( response.Value ) //Creación de usuario exitosa
                     {
-                        Toast.MakeText(this, response.Key[0], ToastLength.Long).Show();
-                    }
-                    else
-                    {
-                        Toast.MakeText(this, response.Key[0], ToastLength.Long).Show();
-
                         var LoginScreen = new Intent(this, typeof(LoginScreen));
                         this.StartActivity(LoginScreen);
                         this.Finish();
                     }
+
+                    foreach (var item in response.Key)
+                    {
+                        Toast.MakeText(this, item, ToastLength.Long).Show();
+                    }
+                }
+                else
+                {
+                    Toast.MakeText(this, Validator.Key, ToastLength.Long).Show();
                 }
             };
 
@@ -85,6 +76,72 @@ namespace heariit_ma
                 this.Finish();
             };
 
+        }
+
+        private KeyValuePair<string, bool> ValidateFields(string Email, string Password1, string Password2, string Username, string FirstName, string LastName)
+        {
+            string Message = null;
+            bool Valid = false;
+
+            if( !string.IsNullOrEmpty(FirstName) )
+            {
+                if (!string.IsNullOrEmpty(LastName))
+                {
+                    if (!string.IsNullOrEmpty(Username))
+                    {
+                        if( manager.AvailableUsername(Username))
+                        {
+                            if (Android.Util.Patterns.EmailAddress.Matcher(Email).Matches())
+                            {
+                                if (manager.AvailableEmail(Email))
+                                {
+                                    if (!string.IsNullOrEmpty(Password1) || !string.IsNullOrEmpty(Password2))
+                                    {
+                                        if (Password1.Equals(Password2))
+                                        {
+                                            Valid = true;
+                                        }
+                                        else
+                                        {
+                                            Message = Application.Context.Resources.GetString(Resource.String.error_password_not_equal);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Message = "Password " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                                    }
+                                }
+                                else
+                                {
+                                    Message = "Email '" + Email + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
+                                }
+                            }
+                            else
+                            {
+                                Message = "Email " + Application.Context.Resources.GetString(Resource.String.bad_email);
+                            }
+                        }
+                        else
+                        {
+                            Message = "Username '" + Username + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
+                        }
+                    }
+                    else
+                    {
+                        Message = "Username " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                    }
+                }
+                else
+                {
+                    Message = "Last name " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                }
+            }
+            else
+            {
+                Message = "First name " + Application.Context.Resources.GetString(Resource.String.empty_field);
+            }
+            
+            return new KeyValuePair<string, bool>(Message, Valid);
         }
     }
 }

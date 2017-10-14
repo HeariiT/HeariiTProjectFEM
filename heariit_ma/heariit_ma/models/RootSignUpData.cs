@@ -13,9 +13,7 @@ using Android.Widget;
 namespace heariit_ma.models
 {
     public class Errors
-    {
-        public List<string> email { get; set; }
-        public List<string> username { get; set; }
+    {        
         public List<string> full_messages { get; set; }
     }
 

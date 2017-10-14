@@ -11,4 +11,6 @@
   <string name="bad_email">You must enter a valid email address.</string>
   <string name="empty_field">must not be empty.</string>
   <string name="error_password_not_equal">Passwords are not equal.</string>
+  <string name="error_not_available">has already been registered.</string>
+
 </resources>

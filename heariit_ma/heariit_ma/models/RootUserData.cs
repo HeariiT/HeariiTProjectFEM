@@ -16,15 +16,15 @@ namespace heariit_ma.models
 {
     public class Data
     {
-        public int id { get; set; }
+        public int? id { get; set; }
         public string email { get; set; }
         public string provider { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string username { get; set; }
         public string uid { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
+        public DateTime? created_at { get; set; }
+        public DateTime? updated_at { get; set; }
     }
 
     public class RootUserData 

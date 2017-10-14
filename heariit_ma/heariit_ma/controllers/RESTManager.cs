@@ -24,12 +24,14 @@ namespace heariit_ma
         private const string UrlSignIn = "/sign_in";
         private const string UrlSignUp = "/sign_up";
         private const string UrlMyProfile = "/my";
+        private const string UrlValidateEmail = "/email";
+        private const string UrlValidateUsername = "/username";
 
         private RestClient client;
 
         public RESTManager()
         {
-            BackendAddress = "http://192.168.43.249:4000";
+            BackendAddress = "http://192.168.0.19:4000";
             X_access_token = null;
             client = new RestClient(BackendAddress);
         }
@@ -47,10 +49,10 @@ namespace heariit_ma
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignIn, Method.POST);
-            request.AddParameter("email", Email);
-            request.AddParameter("password", Password);
-            //request.AddParameter("email", "luergica2@gmail.com");
-            //request.AddParameter("password", "12345678");
+            //request.AddParameter("email", Email);
+            //request.AddParameter("password", Password);
+            request.AddParameter("email", "luergica2@gmail.com");
+            request.AddParameter("password", "12345678");
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response
@@ -64,7 +66,7 @@ namespace heariit_ma
                     X_access_token = response.Headers.ToList().Find(x => x.Name == "x-access-token").Value.ToString();
                     RootUserData user = JsonConvert.DeserializeObject<RootUserData>(response.Content);
                     
-                    CurrentUser.id = user.data.id;
+                    CurrentUser.id = user.data.id ?? default(int);
                     CurrentUser.email = user.data.email;
                     CurrentUser.first_name = user.data.first_name;
                     CurrentUser.last_name = user.data.last_name;
@@ -89,33 +91,32 @@ namespace heariit_ma
         /**
          *  List<string> - Lista de cadenas para ser mostradas en un Toast
         **/
-        public KeyValuePair<List<string>, bool> SignUp( string email, string password, string username, string first_name, string last_name)
+        public KeyValuePair<List<string>, bool> SignUp( string Email, string Password, string Username, string FirstName, string LastName)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignUp, Method.POST);
-            request.AddParameter("email", email);
-            request.AddParameter("password", password);
-            request.AddParameter("username", username);
-            request.AddParameter("first_name", first_name);
-            request.AddParameter("last_name", last_name);
+            request.AddParameter("email", Email);
+            request.AddParameter("password", Password);
+            request.AddParameter("username", Username);
+            request.AddParameter("first_name", FirstName);
+            request.AddParameter("last_name", LastName);
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response
             try
             {
                 IRestResponse response = client.Execute(request);
-                RootSignUpData user = null;
-
+                RootSignUpData user = JsonConvert.DeserializeObject<RootSignUpData>(response.Content);
+                
                 if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign up (200)
                 {
-                    user = JsonConvert.DeserializeObject<RootSignUpData>(response.Content);
-                    List<string> oks = new List<string> { Application.Context.Resources.GetString(Resource.String.signup_message) };
-                    return new KeyValuePair<List<string>, bool>(oks, true);
+                    List<string> Success = new List<string> { Application.Context.Resources.GetString(Resource.String.signup_message) };
+                    return new KeyValuePair<List<string>, bool>(Success, true);
                 }
-                else if (response.StatusCode.Equals(System.Net.HttpStatusCode.BadRequest)) //Bad Request (400)
+                else if (response.StatusCode.ToString().Equals("422")) //Unprocessable Entity (422)
                 {
-                    List<string> err = new List<string>(user.errors.full_messages);
-                    return new KeyValuePair<List<string>, bool>(err, false);
+                    List<string> Errors = new List<string>(user.errors.full_messages);
+                    return new KeyValuePair<List<string>, bool>(Errors, false);
                 }
             }
             catch (Exception ex)
@@ -128,7 +129,61 @@ namespace heariit_ma
             return new KeyValuePair<List<string>, bool>(strings, false);
         }
 
+        /**
+         *  bool - verdadero si el email suministrado esta disponible
+        **/
+        public bool AvailableEmail(string Email)
+        {
+            //Request method and parameters
+            var request = new RestRequest(UrlValidateEmail, Method.POST);
+            request.AddParameter("email", Email);
+            //Headers
+            request.AddHeader("Content-Type", "application/json");
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
 
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.NotFound)) //Bad Request (400)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@ValidateEmail method: " + ex.Message);
+                return false;
+            }
+            return false;
+        }
+
+        /**
+         * bool - verdadero si el username suministrado esta disponible
+        **/
+        public bool AvailableUsername(string Username)
+        {
+            //Request method and parameters
+            var request = new RestRequest(UrlValidateUsername, Method.POST);
+            request.AddParameter("username", Username);
+            //Headers
+            request.AddHeader("Content-Type", "application/json");
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.NotFound)) //Bad Request (400)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@ValidateUsername method: " + ex.Message);
+                return false;
+            }
+            return false;
+        }
 
     }
 }
