@@ -17,7 +17,6 @@ namespace heariit_ma.models
         public string Id {get; set;}
         public string Title {get; set;}
         public string Artist {get; set;}
-        public string Time {get; set;}
         public string ArrPath {get; set;}
         public string ArtistAlbum {get; set;}
     }

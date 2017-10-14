@@ -12,5 +12,5 @@
   <string name="empty_field">must not be empty.</string>
   <string name="error_password_not_equal">Passwords are not equal.</string>
   <string name="error_not_available">has already been registered.</string>
-
+  <string name="warning_not_songs">You do not have any songs.</string>
 </resources>

@@ -46,11 +46,9 @@ namespace heariit_ma.models
 
             var title = view.FindViewById(Resource.Id.title) as TextView;
             var artist = view.FindViewById(Resource.Id.artist) as TextView;
-            var time = view.FindViewById(Resource.Id.time) as TextView;
 
             title.SetText(" " + item.Title, TextView.BufferType.Normal);
             artist.SetText(" " + item.Artist, TextView.BufferType.Normal);
-            time.SetText(" " + item.Time, TextView.BufferType.Normal);
             return view;
         }
 

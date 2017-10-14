@@ -74,6 +74,7 @@
     <Compile Include="models\Datos.cs" />
     <Compile Include="models\RootSignUpData.cs" />
     <Compile Include="models\RootUserData.cs" />
+    <Compile Include="models\SongInfo.cs" />
     <Compile Include="Reproductive.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

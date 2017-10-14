@@ -27,12 +27,13 @@ namespace heariit_ma
         private const string UrlValidateEmail = "/email";
         private const string UrlValidateUsername = "/username";
         private const string UrlValidateToken = "/validate";
+        private const string UrlMySongs = "/songs";
 
         private RestClient client;
 
         public RESTManager()
         {
-            BackendAddress = "http://192.168.0.19:4000";
+            BackendAddress = "http://10.203.190.9:4000";
             X_access_token = null;
             client = new RestClient(BackendAddress);
         }
@@ -50,10 +51,10 @@ namespace heariit_ma
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignIn, Method.POST);
-            //request.AddParameter("email", Email);
-            //request.AddParameter("password", Password);
-            request.AddParameter("email", "luergica2@gmail.com");
-            request.AddParameter("password", "12345678");
+            request.AddParameter("email", Email);
+            request.AddParameter("password", Password);
+            //request.AddParameter("email", "luergica2@gmail.com");
+            //request.AddParameter("password", "12345678");
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response
@@ -212,6 +213,40 @@ namespace heariit_ma
                 return false;
             }
             return false;
+        }
+
+        public SongInfo[] MySongs(){
+
+            SongInfo[] MySongs;
+            var request = new RestRequest(UrlMySongs, Method.GET);
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    string MyString = response.Content.ToString();
+                    if (!string.IsNullOrEmpty(MyString))
+                    {
+                        Console.WriteLine(MyString);
+                        MySongs = Newtonsoft.Json.JsonConvert.DeserializeObject<SongInfo[]>(MyString);
+                        return MySongs;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Not Found");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@SignIn method: " + ex.Message);
+            }
+
+            Console.WriteLine("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            return new SongInfo[0];
+
         }
 
     }
