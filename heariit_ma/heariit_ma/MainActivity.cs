@@ -15,7 +15,7 @@ using Android.Preferences;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT", Icon = "@drawable/icon")]
+    [Activity(Label = "HeariiT - ", Icon = "@drawable/icon")]
     public class MainActivity : Activity {
         List<Datos> items;
         ListView listData;
@@ -53,6 +53,8 @@ namespace heariit_ma
 
             Console.WriteLine("El token es: " + CurrentUser.x_access_token);
             Console.WriteLine("El username es: " + CurrentUser.username);
+            this.Window.SetTitle(CurrentUser.username);
+
             MySongs = manager.MySongs();
             if (MySongs.Length == 0)
             {

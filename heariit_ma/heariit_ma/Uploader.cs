@@ -15,7 +15,7 @@ using heariit_ma.models;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT - Upload a song", MainLauncher = true,Icon = "@drawable/icon")]
+    [Activity(Label = "HeariiT - Upload a song", Icon = "@drawable/icon")]
     public class Uploader : Activity
     {
         private static readonly int PickSongId = 1000;

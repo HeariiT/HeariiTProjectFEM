@@ -15,7 +15,7 @@ using Android.Preferences;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT", Icon = "@drawable/icon")]
+    [Activity(Label = "HeariiT", MainLauncher = true, Icon = "@drawable/icon")]
     public class LoginScreen : Activity
     {
         private bool Validated = true;
