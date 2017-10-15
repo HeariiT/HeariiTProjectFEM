@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace heariit_ma.models
 {
-    class CategoryData
+    public class CategoryData
     {
         public string category_name { get; set; }
         public string category_id { get; set; }

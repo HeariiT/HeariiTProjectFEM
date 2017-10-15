@@ -31,7 +31,7 @@ namespace heariit_ma
         private const string UrlMySongs = "/songs";
         private const string UrlDownloadSongs = "/download/";
         private const string UrlSongGategory = "/category_for_file/";
-        private const string UrlMatch = "/match/";
+        private const string UrlMatch = "/match";
         private const string UrlUserCategories = "/user_categories";
 
         private RestClient client;
@@ -223,8 +223,7 @@ namespace heariit_ma
         /**
          * Arreglo de objetos SongInfo
         **/
-        public SongInfo[] MySongs()
-        {
+        public SongInfo[] MySongs() {
 
             SongInfo[] MySongs;
             var request = new RestRequest(UrlMySongs, Method.GET);
@@ -320,5 +319,116 @@ namespace heariit_ma
             }
             return category;
         }
+
+
+        /*
+         *Retorna las categorías de un usuario
+        */
+
+        public CategoryData[] getMyCategories() {
+            var request = new RestRequest(UrlUserCategories, Method.GET);
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    string MyString = response.Content.ToString();
+                    CategoryData[] cat;
+                    if (!string.IsNullOrEmpty(MyString))
+                    {
+                        Console.WriteLine(MyString);
+                        cat = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryData[]>(MyString);
+                        return cat;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No Acepted at RESTManaher@getMyCategories, Status: " + response.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@getMyCategories method: " + ex.Message);
+            }
+
+            return new CategoryData[0];
+        }
+        public class matchObj
+        {
+            public string category_id { get; set; }
+            public int file_id { get; set; }
+        }
+        public bool Match(int song_id, string category_id, bool new_match){
+            RestRequest request; 
+            if (new_match)
+            {
+                request = new RestRequest(UrlMatch, Method.POST);
+            }
+            else
+            {
+                request = new RestRequest(UrlMatch, Method.PUT);
+            }
+
+            
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddParameter("category_id", category_id, ParameterType.RequestBody);
+            //request.AddParameter("file_id", (int)song_id, ParameterType.RequestBody);
+            var req = new matchObj { category_id = category_id, file_id = song_id };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(req);
+            
+            Console.WriteLine(request.GetHashCode());
+
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.Created)|| 
+                    response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("No Acepted at RESTManager@Match, Status: " + response.StatusCode.ToString());
+                    Console.WriteLine(response.Content.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@Match method: " + ex.Message);
+
+            }
+            return false;
+        }
+
+        public bool DeleteMatch(int id)
+        {
+            var request = new RestRequest(UrlMatch+"/"+id.ToString(), Method.DELETE);
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("No Acepted at RESTManager@DeleteMatch, Status: " + response.StatusCode.ToString());
+                    Console.WriteLine(response.Content.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@DeleteMatch method: " + ex.Message);
+            }
+            
+            return false;
+        }
     }
+
 }
