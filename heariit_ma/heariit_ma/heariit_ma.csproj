@@ -66,10 +66,13 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoryChooser.cs" />
     <Compile Include="LoginScreen.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MediaPlayerRegistry.cs" />
     <Compile Include="models\AudioAdapter.cs" />
+    <Compile Include="models\CategoryAdapter.cs" />
+    <Compile Include="models\CategoryData.cs" />
     <Compile Include="models\CurrentUser.cs" />
     <Compile Include="models\Datos.cs" />
     <Compile Include="models\RootSignUpData.cs" />
@@ -98,6 +101,12 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\SignUpLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\CategoryLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\ItemCategory.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

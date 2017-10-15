@@ -22,6 +22,7 @@ namespace heariit_ma
         AudioAdapter audioAdapter;
         RESTManager manager = new RESTManager();
         SongInfo[] MySongs;
+        Bundle save;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             
@@ -66,9 +67,23 @@ namespace heariit_ma
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
                 => listView_ItemClick(sender, args);
             audioCursor();
-            
+
+            listData.ItemLongClick += (object sender, AdapterView.ItemLongClickEventArgs args)
+                    => listView_ItemLongClick(sender, args);
         }
 
+        void listView_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs E){
+            int e = E.Position;
+            var item = this.audioAdapter.GetItemAtPosition(e);
+            int id = MySongs[e].id;
+            string category_name = item.Category;
+            var intent = new Intent(this, typeof(CategoryChooser));
+            intent.PutExtra("currentCategory", category_name);
+            intent.PutExtra("songId", id);
+            this.StartActivity(intent);
+            OnCreate(save);
+        }
+        
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
             int e = E.Position;
             var item = this.audioAdapter.GetItemAtPosition(e);
@@ -92,6 +107,7 @@ namespace heariit_ma
             intent.PutExtra("songArtist", songArtist);
             intent.PutExtra("listSize", items.Count);
             this.StartActivity(intent);
+            
         }
 
         public void setSongs(){
@@ -122,8 +138,9 @@ namespace heariit_ma
                 var arrPath = cs.id.ToString();
                 var artistAlbum = "";
                 String urlAlbum = urlAlbumArt(artistAlbum);
+                var category = manager.getSongCategory(arrPath);
                 items.Add(new Datos() { Title = audioTitle, Artist = artist, ArrPath = arrPath,
-                                        ArtistAlbum=urlAlbum});
+                    ArtistAlbum = urlAlbum, Category = category });
             }
             
             listData.Adapter = audioAdapter = new AudioAdapter(this, items);

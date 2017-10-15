@@ -41,6 +41,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout2"
             android:layout_alignParentEnd="true">
+          <TextView
+                android:text="Category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/CategoryText"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-thin"/>
+        
         </LinearLayout>
+        
     </RelativeLayout>
 </LinearLayout>
