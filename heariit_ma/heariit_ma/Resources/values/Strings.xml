@@ -3,6 +3,7 @@
   <string name="app_name">heariit_ma</string>
   <string name="welcome_message">Welcome back, </string>
   <string name="signup_message">Welcome to HeariiT!</string>
+  <string name="song_uploaded">The song has been uploaded.</string>
   
   <!-- Errors -->
   <string name="unexpected_error">Unexpected error.</string>
@@ -13,4 +14,5 @@
   <string name="error_password_not_equal">Passwords are not equal.</string>
   <string name="error_not_available">has already been registered.</string>
   <string name="warning_not_songs">You do not have any songs.</string>
+  <string name="incomplete_request">Failed request, server responded with</string>
 </resources>

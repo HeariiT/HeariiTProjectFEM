@@ -11,14 +11,15 @@ using Android.Views;
 using Android.Widget;
 using Android.Database;
 using Android.Provider;
+using heariit_ma.models;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT - Upload a song", Icon = "@drawable/icon")]
+    [Activity(Label = "HeariiT - Upload a song", MainLauncher = true,Icon = "@drawable/icon")]
     public class Uploader : Activity
     {
-        public static readonly int PickSongId = 1000;
-        private Android.Net.Uri uri;
+        private static readonly int PickSongId = 1000;
+        private string Path;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -30,22 +31,35 @@ namespace heariit_ma
             TextView Author = FindViewById<TextView>(Resource.Id.uploadAuthorText);
 
             Button PickerBtn = FindViewById<Button>(Resource.Id.uploadPickerBtn);
-            Button UploadBtn = FindViewById<Button>(Resource.Id.uploadPickerBtn);
-            Button BackBtn = FindViewById<Button>(Resource.Id.uploadPickerBtn);
+            Button UploadBtn = FindViewById<Button>(Resource.Id.uploadUploadBtn);
+            Button BackBtn = FindViewById<Button>(Resource.Id.uploadBackBtn);
 
             PickerBtn.Click += delegate
             {
                 Intent intent = new Intent();
-                intent.SetType("image/*");
+                intent.SetType("audio/mp3");
                 intent.SetAction(Intent.ActionGetContent);
                 StartActivityForResult(Intent.CreateChooser(intent, "Pick a song"), PickSongId);
+            };
 
-                Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + uri);
+            UploadBtn.Click += delegate
+            {
+                RESTManager client = new RESTManager();
+                KeyValuePair<string, bool> response = client.UploadSong(Title.Text, Album.Text, Author.Text, Path);
+                if( response.Value )
+                {
+                    var MainActivity = new Intent(this, typeof(MainActivity));
+                    MainActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+                    this.StartActivity(MainActivity);
+                    this.Finish();
+                }
+                Toast.MakeText(this, response.Key, ToastLength.Long).Show();
             };
 
             BackBtn.Click += delegate
             {
                 var MainActivity = new Intent(this, typeof(MainActivity));
+                MainActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
                 this.StartActivity(MainActivity);
                 this.Finish();
             };
@@ -55,35 +69,41 @@ namespace heariit_ma
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
-            ICursor cursor = null;
-            try
+            if (resultCode == Result.Ok && data != null && requestCode == PickSongId)
             {
-                // assuming image
-                var docID = DocumentsContract.GetDocumentId(data.Data);
-                var id = docID.Split(':')[1];
-                var whereSelect = MediaStore.Images.ImageColumns.Id + "=?";
-                var projections = new string[] { MediaStore.Images.ImageColumns.Data };
-                // Try internal storage first
-                cursor = ContentResolver.Query(MediaStore.Images.Media.InternalContentUri, projections, whereSelect, new string[] { id }, null);
-                if (cursor.Count == 0)
-                {
-                    // not found on internal storage, try external storage
-                    cursor = ContentResolver.Query(MediaStore.Images.Media.ExternalContentUri, projections, whereSelect, new string[] { id }, null);
-                }
-                var colData = cursor.GetColumnIndexOrThrow(MediaStore.Images.ImageColumns.Data);
+                Button Picker = FindViewById<Button>(Resource.Id.uploadPickerBtn);
+                Button Upload = FindViewById<Button>(Resource.Id.uploadUploadBtn);
+
+                string Path = GetRealPathFromURI(data.Data);
+                this.Path = Path;
+                string Filename = System.IO.Path.GetFileName(Path);
+                Picker.Text = Filename;
+                Upload.Enabled = true;
+            }
+        }
+
+        private string GetRealPathFromURI(Android.Net.Uri uri)
+        {
+            string doc_id = "";
+            using (var c1 = ContentResolver.Query(uri, null, null, null, null))
+            {
+                c1.MoveToFirst();
+                String document_id = c1.GetString(0);
+                doc_id = document_id.Substring(document_id.LastIndexOf(":") + 1);
+            }
+
+            string path = null;
+
+            // The projection contains the columns we want to return in our query.
+            string selection = MediaStore.Audio.Media.InterfaceConsts.Id + " =? ";
+            using (var cursor = ManagedQuery(MediaStore.Audio.Media.ExternalContentUri, null, selection, new string[] { doc_id }, null))
+            {
+                if (cursor == null) return path;
+                var columnIndex = cursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.Audio.Media.InterfaceConsts.Data);
                 cursor.MoveToFirst();
-                var fullPathToImage = cursor.GetString(colData);
-                Console.WriteLine("MediaPath", fullPathToImage);
+                path = cursor.GetString(columnIndex);
             }
-            catch (Exception err)
-            {
-                Console.WriteLine("MediaPath", err.Message);
-            }
-            finally
-            {
-                cursor?.Close();
-                cursor?.Dispose();
-            }
+            return path;
         }
     }
 }
