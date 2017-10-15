@@ -22,7 +22,6 @@ namespace heariit_ma
         AudioAdapter audioAdapter;
         RESTManager manager = new RESTManager();
         SongInfo[] MySongs;
-        Bundle save;
 
         protected override void OnCreate(Bundle savedInstanceState) {
             
@@ -79,8 +78,10 @@ namespace heariit_ma
             {
                 var UploadActivity = new Intent(this, typeof(Uploader));
                 UploadActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+                
                 this.StartActivity(UploadActivity);
                 this.Finish();
+                
             };
 
             SignOutBtn.Click += delegate
@@ -95,6 +96,13 @@ namespace heariit_ma
             };
             
         }
+        
+        void updateList()
+        {
+            listData = FindViewById<ListView>(Resource.Id.fileManagerList);
+            items = new List<Datos>();
+            audioCursor();
+        }
 
         void listView_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs E){
             int e = E.Position;
@@ -105,7 +113,7 @@ namespace heariit_ma
             intent.PutExtra("currentCategory", category_name);
             intent.PutExtra("songId", id);
             this.StartActivity(intent);
-            OnCreate(save);
+            this.Finish();
         }
         
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
@@ -131,7 +139,6 @@ namespace heariit_ma
             intent.PutExtra("songArtist", songArtist);
             intent.PutExtra("listSize", items.Count);
             this.StartActivity(intent);
-            
         }
 
         public void setSongs(){

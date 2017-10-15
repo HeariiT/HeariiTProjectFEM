@@ -34,6 +34,7 @@ namespace heariit_ma
         private const string UrlSongGategory = "/category_for_file/";
         private const string UrlMatch = "/match";
         private const string UrlUserCategories = "/user_categories";
+        private const string UrlDefaultCategories = "/categories";
 
         private RestClient client;
 
@@ -358,8 +359,10 @@ namespace heariit_ma
         */
 
         public CategoryData[] getMyCategories() {
-            var request = new RestRequest(UrlUserCategories, Method.GET);
-            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            var request = new RestRequest(UrlDefaultCategories, Method.GET);
+            CategoryData[] cat1 = new CategoryData[0];
+            CategoryData[] cat2 = new CategoryData[0];
+            CategoryData[] catAll= new CategoryData[0]; 
 
             try
             {
@@ -367,13 +370,8 @@ namespace heariit_ma
                 if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 {
                     string MyString = response.Content.ToString();
-                    CategoryData[] cat;
-                    if (!string.IsNullOrEmpty(MyString))
-                    {
-                        Console.WriteLine(MyString);
-                        cat = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryData[]>(MyString);
-                        return cat;
-                    }
+                    Console.WriteLine(MyString);
+                    cat1 = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryData[]>(MyString);
                 }
                 else
                 {
@@ -383,9 +381,45 @@ namespace heariit_ma
             catch (Exception ex)
             {
                 Console.WriteLine("Exception at RESTManager@getMyCategories method: " + ex.Message);
+                return new CategoryData[0];
             }
 
-            return new CategoryData[0];
+            var request2 = new RestRequest(UrlUserCategories, Method.GET);
+            request2.AddHeader("x-access-token", CurrentUser.x_access_token);
+            try
+            {
+                IRestResponse response2 = client.Execute(request2);
+                if (response2.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    string MyString2 = response2.Content.ToString();
+                    cat2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryData[]>(MyString2);
+
+                    if (string.IsNullOrEmpty(MyString2))
+                    {
+                        cat2 = new CategoryData[0];
+                    }
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@getMyCategories method: " + ex.Message);
+                return new CategoryData[0];
+            }
+
+            if (cat2.Length != 0)
+            {
+                catAll = new CategoryData[cat2.Length + cat1.Length];
+                Array.Copy(cat2, catAll, cat2.Length);
+                Array.Copy(cat1, 0, catAll, cat2.Length, cat1.Length);
+            }
+            else
+            {
+                catAll = cat1;
+            }
+            return catAll;
+            
         }
         public class matchObj
         {

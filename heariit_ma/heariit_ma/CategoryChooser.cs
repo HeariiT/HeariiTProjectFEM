@@ -48,6 +48,14 @@ namespace heariit_ma
             categoryCursor();
         }
 
+        public override void OnBackPressed()
+        {
+            var MainActivity = new Intent(this, typeof(MainActivity));
+            MainActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+            this.StartActivity(MainActivity);
+            this.Finish();
+        }
+
         void printProtm(bool succ, bool del, string name)
         {
             if (!succ)
@@ -67,6 +75,7 @@ namespace heariit_ma
                     Toast.MakeText(this, Application.Resources.GetString(Resource.String.match_succ), ToastLength.Long).Show();
                     current_category = name;
                 }
+                
             }
             
         }
