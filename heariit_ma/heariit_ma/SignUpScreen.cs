@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT")]
+    [Activity(Label = "HeariiT", Icon = "@drawable/icon")]
     public class SignUpScreen : Activity
     {
         RESTManager manager = new RESTManager();

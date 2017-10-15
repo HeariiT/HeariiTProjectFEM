@@ -261,13 +261,6 @@ namespace heariit_ma
             try
             {
                 IRestResponse response = client.Execute(request);
-                Console.WriteLine("AAAAAAAAAAAAAAAAAAAA");
-                Console.WriteLine(response.StatusCode);
-                Console.WriteLine("BBBBBBBBBBBBBBBBBBBB");
-                Console.WriteLine(response.Headers);
-                Console.WriteLine("CCCCCCCCCCCCCCCCCCCC");
-                Console.WriteLine(response.Content);
-                Console.WriteLine("DDDDDDDDDDDDDDDDDDDD");
                 if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 {
                     Filename = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".mp3";
@@ -288,6 +281,44 @@ namespace heariit_ma
             return null;
         }
 
+        /**
+         * bool - verdadero si se completo la carga de la cancion
+        **/
+        public KeyValuePair<string, bool> UploadSong(string Title, string Album, string Author, string Path )
+        {
+            bool Completed = false;
+            string Message = null;
+            //Request method and parameters
+            var request = new RestRequest(UrlMySongs, Method.POST);
+            request.AddParameter("title", Title);
+            request.AddParameter("album", Album);
+            request.AddParameter("author", Author);
+            request.AddFile("attachment", Path);
+            //Headers
+            request.AddHeader("Content-Type", "multipart/form-data");
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Ok (200)
+                {
+                    Completed = true;
+                    Message = Application.Context.Resources.GetString(Resource.String.song_uploaded);
+                }
+                else
+                {
+                    Message = Application.Context.Resources.GetString(Resource.String.incomplete_request) + " " + response.StatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@ValidateUsername method: " + ex.Message);
+                Message = Application.Context.Resources.GetString(Resource.String.unexpected_error);
+            }
+            return new KeyValuePair<string, bool>(Message, Completed);
+        }
         /*
          *Retorna la categoría de una canción 
         */

@@ -15,7 +15,7 @@ using Android.Preferences;
 
 namespace heariit_ma
 {
-    [Activity(Label = "HeariiT")]
+    [Activity(Label = "HeariiT - ", Icon = "@drawable/icon")]
     public class MainActivity : Activity {
         List<Datos> items;
         ListView listData;
@@ -54,13 +54,16 @@ namespace heariit_ma
 
             Console.WriteLine("El token es: " + CurrentUser.x_access_token);
             Console.WriteLine("El username es: " + CurrentUser.username);
+            this.Window.SetTitle(CurrentUser.username);
+
             MySongs = manager.MySongs();
             if (MySongs.Length == 0)
             {
                 Toast.MakeText(this, Application.Resources.GetString(Resource.String.warning_not_songs), ToastLength.Long).Show();
             }
             SetContentView(Resource.Layout.Main);
-            
+            Button uploadBtn = FindViewById<Button>(Resource.Id.mainUploadBtn);
+
             listData = FindViewById<ListView>(Resource.Id.listView1);
             items = new List<Datos>();
 
@@ -70,6 +73,15 @@ namespace heariit_ma
 
             listData.ItemLongClick += (object sender, AdapterView.ItemLongClickEventArgs args)
                     => listView_ItemLongClick(sender, args);
+
+            uploadBtn.Click += delegate
+            {
+                var UploadActivity = new Intent(this, typeof(Uploader));
+                UploadActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+                this.StartActivity(UploadActivity);
+                this.Finish();
+            };
+            
         }
 
         void listView_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs E){

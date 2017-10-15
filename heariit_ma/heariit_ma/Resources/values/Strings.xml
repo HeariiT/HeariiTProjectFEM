@@ -6,6 +6,8 @@
   <string name="match_succ">New category assigned succesfully.</string>
   <string name="match_del">Category deleted succesfully.</string>
 
+  <string name="song_uploaded">The song has been uploaded.</string>
+  
   <!-- Errors -->
   <string name="unexpected_error">Unexpected error.</string>
   <string name="failed_credentials">Invalid email or username, try again.</string>
@@ -17,4 +19,5 @@
   <string name="warning_not_songs">You do not have any songs.</string>
   <string name="warning_not_categories">You do not have any categories.</string>
   <string name="match_fail">Error changing category.</string>
+  <string name="incomplete_request">Failed request, server responded with</string>
 </resources>
