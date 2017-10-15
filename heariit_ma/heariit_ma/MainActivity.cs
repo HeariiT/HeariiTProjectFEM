@@ -54,7 +54,7 @@ namespace heariit_ma
 
             Console.WriteLine("El token es: " + CurrentUser.x_access_token);
             Console.WriteLine("El username es: " + CurrentUser.username);
-            this.Window.SetTitle(CurrentUser.username);
+            this.Window.SetTitle("Welcome, " + CurrentUser.username);
 
             MySongs = manager.MySongs();
             if (MySongs.Length == 0)
@@ -62,9 +62,10 @@ namespace heariit_ma
                 Toast.MakeText(this, Application.Resources.GetString(Resource.String.warning_not_songs), ToastLength.Long).Show();
             }
             SetContentView(Resource.Layout.Main);
-            Button uploadBtn = FindViewById<Button>(Resource.Id.mainUploadBtn);
+            Button UploadBtn = FindViewById<Button>(Resource.Id.mainUploadBtn);
+            Button SignOutBtn = FindViewById<Button>(Resource.Id.mainSignOutBtn);
 
-            listData = FindViewById<ListView>(Resource.Id.listView1);
+            listData = FindViewById<ListView>(Resource.Id.fileManagerList);
             items = new List<Datos>();
 
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
@@ -74,12 +75,23 @@ namespace heariit_ma
             listData.ItemLongClick += (object sender, AdapterView.ItemLongClickEventArgs args)
                     => listView_ItemLongClick(sender, args);
 
-            uploadBtn.Click += delegate
+            UploadBtn.Click += delegate
             {
                 var UploadActivity = new Intent(this, typeof(Uploader));
                 UploadActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
                 this.StartActivity(UploadActivity);
                 this.Finish();
+            };
+
+            SignOutBtn.Click += delegate
+            {
+                if( manager.SignOut( ) )
+                {
+                    var LoginActivity = new Intent(this, typeof(LoginScreen));
+                    if (MediaPlayerRegistry.currentPlayer.IsPlaying) { MediaPlayerRegistry.currentPlayer.Stop(); }                    
+                    this.StartActivity(LoginActivity);
+                    this.Finish();
+                }                
             };
             
         }

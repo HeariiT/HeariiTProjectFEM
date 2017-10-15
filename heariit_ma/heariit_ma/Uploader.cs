@@ -44,16 +44,25 @@ namespace heariit_ma
 
             UploadBtn.Click += delegate
             {
-                RESTManager client = new RESTManager();
-                KeyValuePair<string, bool> response = client.UploadSong(Title.Text, Album.Text, Author.Text, Path);
-                if( response.Value )
+                KeyValuePair<string, bool> Valid = ValidateFields(Title.Text, Author.Text, Album.Text);
+                if ( Valid.Value )
                 {
-                    var MainActivity = new Intent(this, typeof(MainActivity));
-                    MainActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
-                    this.StartActivity(MainActivity);
-                    this.Finish();
+                    RESTManager client = new RESTManager();
+                    KeyValuePair<string, bool> response = client.UploadSong(Title.Text, Album.Text, Author.Text, Path);
+                    if (response.Value)
+                    {
+                        var MainActivity = new Intent(this, typeof(MainActivity));
+                        MainActivity.PutExtra("x-access-token", CurrentUser.x_access_token);
+                        this.StartActivity(MainActivity);
+                        this.Finish();
+                    }
+                    Toast.MakeText(this, response.Key, ToastLength.Long).Show();
                 }
-                Toast.MakeText(this, response.Key, ToastLength.Long).Show();
+                else
+                {
+                    Toast.MakeText(this, Valid.Key, ToastLength.Long).Show();
+                }
+                
             };
 
             BackBtn.Click += delegate
@@ -104,6 +113,37 @@ namespace heariit_ma
                 path = cursor.GetString(columnIndex);
             }
             return path;
+        }
+
+        private KeyValuePair<string, bool> ValidateFields(string Title, string Author, string Album)
+        {
+            string Message = null;
+            bool Valid = false;
+
+            if (!string.IsNullOrEmpty(Title))
+            {
+                if (!string.IsNullOrEmpty(Author))
+                {
+                    if (!string.IsNullOrEmpty(Album))
+                    {
+                        Valid = true;
+                    }
+                    else
+                    {
+                        Message = "Album " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                    }
+                }
+                else
+                {
+                    Message = "Author " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                }
+            }
+            else
+            {
+                Message = "Title " + Application.Context.Resources.GetString(Resource.String.empty_field);
+            }
+
+            return new KeyValuePair<string, bool>(Message, Valid);
         }
     }
 }

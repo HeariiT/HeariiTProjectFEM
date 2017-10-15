@@ -24,6 +24,7 @@ namespace heariit_ma
 
         private const string UrlSignIn = "/sign_in";
         private const string UrlSignUp = "/sign_up";
+        private const string UrlSignOut = "/sign_out";
         private const string UrlMyProfile = "/my";
         private const string UrlValidateEmail = "/email";
         private const string UrlValidateUsername = "/username";
@@ -38,7 +39,7 @@ namespace heariit_ma
 
         public RESTManager()
         {
-            BackendAddress = "http://192.168.0.20:4000";
+            BackendAddress = "http://192.168.0.12:4000";
             X_access_token = null;
             client = new RestClient(BackendAddress);
         }
@@ -458,6 +459,34 @@ namespace heariit_ma
                 Console.WriteLine("Exception at RESTManager@DeleteMatch method: " + ex.Message);
             }
             
+            return false;
+        }
+
+        /**
+         * bool - verdadero si la sesión fue cerrada exitosamente
+        **/
+        public bool SignOut()
+        {
+            //Request method and parameters
+            var request = new RestRequest(UrlSignOut, Method.POST);
+            //Headers
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            //Response
+            try
+            {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Ok (200)
+                {
+                    CurrentUser.x_access_token = null;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@ValidateUsername method: " + ex.Message);
+                return false;
+            }
             return false;
         }
     }
