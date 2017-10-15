@@ -66,8 +66,16 @@ namespace heariit_ma
             listData.ItemClick += (object sender, AdapterView.ItemClickEventArgs args)
                 => listView_ItemClick(sender, args);
             audioCursor();
-            
+
+            listData.ItemLongClick += (object sender, AdapterView.ItemLongClickEventArgs args)
+                    => listView_ItemLongClick(sender, args);
         }
+
+        void listView_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs E)
+        {
+            Console.WriteLine("AAAAAAAAAAA");
+        }
+
 
         void listView_ItemClick(object sender, AdapterView.ItemClickEventArgs E) {
             int e = E.Position;
@@ -122,8 +130,13 @@ namespace heariit_ma
                 var arrPath = cs.id.ToString();
                 var artistAlbum = "";
                 String urlAlbum = urlAlbumArt(artistAlbum);
+                var category = manager.getSongCategory(arrPath);
+                if (!category.Equals(""))
+                {
+                    category = "[" + category + "]";
+                }
                 items.Add(new Datos() { Title = audioTitle, Artist = artist, ArrPath = arrPath,
-                                        ArtistAlbum=urlAlbum});
+                    ArtistAlbum = urlAlbum, Category = category });
             }
             
             listData.Adapter = audioAdapter = new AudioAdapter(this, items);

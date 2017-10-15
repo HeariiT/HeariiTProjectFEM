@@ -30,12 +30,15 @@ namespace heariit_ma
         private const string UrlValidateToken = "/validate";
         private const string UrlMySongs = "/songs";
         private const string UrlDownloadSongs = "/download/";
+        private const string UrlSongGategory = "/category_for_file/";
+        private const string UrlMatch = "/match/";
+        private const string UrlUserCategories = "/user_categories";
 
         private RestClient client;
 
         public RESTManager()
         {
-            BackendAddress = "http://10.203.190.9:4000";
+            BackendAddress = "http://192.168.0.20:4000";
             X_access_token = null;
             client = new RestClient(BackendAddress);
         }
@@ -63,13 +66,13 @@ namespace heariit_ma
             try
             {
                 IRestResponse response = client.Execute(request);
-                
+
                 //IRestResponse<Data> response = client.Execute<Data>(request);
-                if(response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign in (200)
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign in (200)
                 {
                     X_access_token = response.Headers.ToList().Find(x => x.Name == "x-access-token").Value.ToString();
                     RootUserData user = JsonConvert.DeserializeObject<RootUserData>(response.Content);
-                    
+
                     CurrentUser.id = user.data.id ?? default(int);
                     CurrentUser.email = user.data.email;
                     CurrentUser.first_name = user.data.first_name;
@@ -77,25 +80,25 @@ namespace heariit_ma
                     CurrentUser.username = user.data.username;
                     CurrentUser.x_access_token = X_access_token;
 
-                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name , X_access_token);
+                    return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name, X_access_token);
                 }
                 else if (response.StatusCode.Equals(System.Net.HttpStatusCode.Unauthorized)) //Unauthorized (401)
                 {
-                    return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.failed_credentials), null );
+                    return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.failed_credentials), null);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception at RESTManager@SignIn method: " + ex.Message);
-                return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
+                return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.bad_connection), null);
             }
-            return new KeyValuePair<string, string>( Application.Context.Resources.GetString(Resource.String.bad_connection), null);
+            return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.bad_connection), null);
         }
 
         /**
          *  List<string> - Lista de cadenas para ser mostradas en un Toast
         **/
-        public KeyValuePair<List<string>, bool> SignUp( string Email, string Password, string Username, string FirstName, string LastName)
+        public KeyValuePair<List<string>, bool> SignUp(string Email, string Password, string Username, string FirstName, string LastName)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignUp, Method.POST);
@@ -111,7 +114,7 @@ namespace heariit_ma
             {
                 IRestResponse response = client.Execute(request);
                 RootSignUpData user = JsonConvert.DeserializeObject<RootSignUpData>(response.Content);
-                
+
                 if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK)) //Successful sign up (200)
                 {
                     List<string> Success = new List<string> { Application.Context.Resources.GetString(Resource.String.signup_message) };
@@ -220,7 +223,8 @@ namespace heariit_ma
         /**
          * Arreglo de objetos SongInfo
         **/
-        public SongInfo[] MySongs(){
+        public SongInfo[] MySongs()
+        {
 
             SongInfo[] MySongs;
             var request = new RestRequest(UrlMySongs, Method.GET);
@@ -238,7 +242,7 @@ namespace heariit_ma
                         return MySongs;
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -249,7 +253,8 @@ namespace heariit_ma
         }
 
 
-        public string getASong(string id) {
+        public string getASong(string id)
+        {
             string SongDownload = UrlDownloadSongs + id;
             string Filename = null;
             var request = new RestRequest(SongDownload, Method.GET);
@@ -284,5 +289,36 @@ namespace heariit_ma
             return null;
         }
 
+        /*
+         *Retorna la categoría de una canción 
+        */
+        public string getSongCategory(string id)
+        {
+
+            string SongCategory = UrlSongGategory + id;
+            var request = new RestRequest(SongCategory, Method.GET);
+            string category = "";
+            request.AddHeader("x-access-token", CurrentUser.x_access_token);
+            try
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode.Equals(System.Net.HttpStatusCode.OK))
+                {
+                    string MyString = response.Content.ToString();
+                    CategoryData cat = new CategoryData();
+                    cat = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryData>(MyString);
+                    if (!string.IsNullOrEmpty(cat.category_name))
+                    {
+                        category = cat.category_name;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception at RESTManager@getSongCategory method: " + ex.Message);
+            }
+            return category;
+        }
     }
 }
