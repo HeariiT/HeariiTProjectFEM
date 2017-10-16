@@ -1471,26 +1471,26 @@ namespace heariit_ma
 			// aapt resource value: 0x7f080009
 			public const int listMode = 2131230729;
 			
-			// aapt resource value: 0x7f08005c
-			public const int listView1 = 2131230812;
+			// aapt resource value: 0x7f080054
+			public const int listView1 = 2131230804;
 			
 			// aapt resource value: 0x7f08002a
 			public const int list_item = 2131230762;
 			
-			// aapt resource value: 0x7f08005a
-			public const int loginButtonSignIn = 2131230810;
-			
 			// aapt resource value: 0x7f08005b
-			public const int loginButtonSignUp = 2131230811;
+			public const int loginButtonSignIn = 2131230811;
 			
-			// aapt resource value: 0x7f080057
-			public const int loginEmailText = 2131230807;
+			// aapt resource value: 0x7f08005c
+			public const int loginButtonSignUp = 2131230812;
 			
-			// aapt resource value: 0x7f080054
-			public const int loginLinearLayout = 2131230804;
+			// aapt resource value: 0x7f080058
+			public const int loginEmailText = 2131230808;
 			
-			// aapt resource value: 0x7f080059
-			public const int loginPasswordText = 2131230809;
+			// aapt resource value: 0x7f080055
+			public const int loginLinearLayout = 2131230805;
+			
+			// aapt resource value: 0x7f08005a
+			public const int loginPasswordText = 2131230810;
 			
 			// aapt resource value: 0x7f080015
 			public const int middle = 2131230741;
@@ -1627,14 +1627,14 @@ namespace heariit_ma
 			// aapt resource value: 0x7f080033
 			public const int textSpacerNoButtons = 2131230771;
 			
-			// aapt resource value: 0x7f080055
-			public const int textView1 = 2131230805;
-			
 			// aapt resource value: 0x7f080056
-			public const int textView2 = 2131230806;
+			public const int textView1 = 2131230806;
 			
-			// aapt resource value: 0x7f080058
-			public const int textView3 = 2131230808;
+			// aapt resource value: 0x7f080057
+			public const int textView2 = 2131230807;
+			
+			// aapt resource value: 0x7f080059
+			public const int textView3 = 2131230809;
 			
 			// aapt resource value: 0x7f08002c
 			public const int title = 2131230764;
