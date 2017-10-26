@@ -77,12 +77,12 @@ namespace heariit_ma
 
                     CurrentUser.id = user.data.id ?? default(int);
                     CurrentUser.email = user.data.email;
-                    CurrentUser.first_name = user.data.first_name;
-                    CurrentUser.last_name = user.data.last_name;
+                    CurrentUser.first_name = "Undefined";
+                    CurrentUser.last_name = "Undefined";
                     CurrentUser.username = user.data.username;
                     CurrentUser.x_access_token = X_access_token;
 
-                    return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.first_name, X_access_token);
+                    return new KeyValuePair<string, string>(Application.Context.Resources.GetString(Resource.String.welcome_message) + " " + CurrentUser.username, X_access_token);
                 }
                 else if (response.StatusCode.Equals(System.Net.HttpStatusCode.Unauthorized)) //Unauthorized (401)
                 {
@@ -100,15 +100,15 @@ namespace heariit_ma
         /**
          *  List<string> - Lista de cadenas para ser mostradas en un Toast
         **/
-        public KeyValuePair<List<string>, bool> SignUp(string Email, string Password, string Username, string FirstName, string LastName)
+        public KeyValuePair<List<string>, bool> SignUp(string Email, string Password, string Username)
         {
             //Request method and parameters
             var request = new RestRequest(UrlSignUp, Method.POST);
             request.AddParameter("email", Email);
             request.AddParameter("password", Password);
             request.AddParameter("username", Username);
-            request.AddParameter("first_name", FirstName);
-            request.AddParameter("last_name", LastName);
+            request.AddParameter("first_name", "Undefined");
+            request.AddParameter("last_name", "Undefined");
             //Headers
             request.AddHeader("Content-Type", "application/json");
             //Response

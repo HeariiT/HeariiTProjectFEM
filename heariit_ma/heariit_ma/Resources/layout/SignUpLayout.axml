@@ -7,18 +7,6 @@
         android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First name"
-        android:id="@+id/signupFirstNameText" />
-    <EditText
-        android:inputType="textPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Last name"
-        android:id="@+id/signupLastNameText" />
-    <EditText
-        android:inputType="textPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:hint="Username"
         android:id="@+id/signupUsernameText" />
     <EditText

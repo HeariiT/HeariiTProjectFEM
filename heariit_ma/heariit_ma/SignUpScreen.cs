@@ -22,8 +22,6 @@ namespace heariit_ma
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.SignUpLayout);
 
-            TextView FirstName = FindViewById<TextView>(Resource.Id.signupFirstNameText);
-            TextView LastName = FindViewById<TextView>(Resource.Id.signupLastNameText);
             TextView Username = FindViewById<TextView>(Resource.Id.signupUsernameText);
             TextView Email = FindViewById<TextView>(Resource.Id.signupEmailText);
             TextView Password1 = FindViewById<TextView>(Resource.Id.signupPasswordText1);
@@ -35,11 +33,11 @@ namespace heariit_ma
 
             SignupButton.Click += delegate
             {
-                KeyValuePair<string, bool> Validator = ValidateFields(Email.Text, Password1.Text, Password2.Text, Username.Text, FirstName.Text, LastName.Text);
+                KeyValuePair<string, bool> Validator = ValidateFields(Email.Text, Password1.Text, Password2.Text, Username.Text);
 
                 if ( Validator.Value ) //Campos correctos
                 {
-                    var response = manager.SignUp(Email.Text, Password1.Text, Username.Text, FirstName.Text, LastName.Text);
+                    var response = manager.SignUp(Email.Text, Password1.Text, Username.Text);
 
                     if ( response.Value ) //Creación de usuario exitosa
                     {
@@ -61,8 +59,6 @@ namespace heariit_ma
 
             ClearButton.Click += delegate
             {
-                FirstName.Text = "";
-                LastName.Text = "";
                 Username.Text = "";
                 Email.Text = "";
                 Password1.Text = "";
@@ -78,67 +74,53 @@ namespace heariit_ma
 
         }
 
-        private KeyValuePair<string, bool> ValidateFields(string Email, string Password1, string Password2, string Username, string FirstName, string LastName)
+        private KeyValuePair<string, bool> ValidateFields(string Email, string Password1, string Password2, string Username)
         {
             string Message = null;
             bool Valid = false;
 
-            if( !string.IsNullOrEmpty(FirstName) )
+            if (!string.IsNullOrEmpty(Username))
             {
-                if (!string.IsNullOrEmpty(LastName))
+                if( manager.AvailableUsername(Username))
                 {
-                    if (!string.IsNullOrEmpty(Username))
+                    if (Android.Util.Patterns.EmailAddress.Matcher(Email).Matches())
                     {
-                        if( manager.AvailableUsername(Username))
+                        if (manager.AvailableEmail(Email))
                         {
-                            if (Android.Util.Patterns.EmailAddress.Matcher(Email).Matches())
+                            if (!string.IsNullOrEmpty(Password1) || !string.IsNullOrEmpty(Password2))
                             {
-                                if (manager.AvailableEmail(Email))
+                                if (Password1 == Password2)
                                 {
-                                    if (!string.IsNullOrEmpty(Password1) || !string.IsNullOrEmpty(Password2))
-                                    {
-                                        if (Password1.Equals(Password2))
-                                        {
-                                            Valid = true;
-                                        }
-                                        else
-                                        {
-                                            Message = Application.Context.Resources.GetString(Resource.String.error_password_not_equal);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Message = "Password " + Application.Context.Resources.GetString(Resource.String.empty_field);
-                                    }
+                                    Valid = true;
                                 }
                                 else
                                 {
-                                    Message = "Email '" + Email + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
+                                    Message = Application.Context.Resources.GetString(Resource.String.error_password_not_equal);
                                 }
                             }
                             else
                             {
-                                Message = "Email " + Application.Context.Resources.GetString(Resource.String.bad_email);
+                                Message = "Password " + Application.Context.Resources.GetString(Resource.String.empty_field);
                             }
                         }
                         else
                         {
-                            Message = "Username '" + Username + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
+                            Message = "Email '" + Email + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
                         }
                     }
                     else
                     {
-                        Message = "Username " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                        Message = "Email " + Application.Context.Resources.GetString(Resource.String.bad_email);
                     }
                 }
                 else
                 {
-                    Message = "Last name " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                    Message = "Username '" + Username + "' " + Application.Context.Resources.GetString(Resource.String.error_not_available);
                 }
             }
             else
             {
-                Message = "First name " + Application.Context.Resources.GetString(Resource.String.empty_field);
+                Message = "Username " + Application.Context.Resources.GetString(Resource.String.empty_field);
             }
             
             return new KeyValuePair<string, bool>(Message, Valid);

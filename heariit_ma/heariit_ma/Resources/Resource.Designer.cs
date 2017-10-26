@@ -191,32 +191,26 @@ namespace heariit_ma
 			// aapt resource value: 0x7f05001a
 			public const int reproductive_title = 2131034138;
 			
-			// aapt resource value: 0x7f050025
-			public const int signupBackBtn = 2131034149;
-			
-			// aapt resource value: 0x7f050024
-			public const int signupClearBtn = 2131034148;
-			
-			// aapt resource value: 0x7f050020
-			public const int signupEmailText = 2131034144;
-			
-			// aapt resource value: 0x7f05001d
-			public const int signupFirstNameText = 2131034141;
-			
-			// aapt resource value: 0x7f05001e
-			public const int signupLastNameText = 2131034142;
-			
-			// aapt resource value: 0x7f050021
-			public const int signupPasswordText1 = 2131034145;
+			// aapt resource value: 0x7f050023
+			public const int signupBackBtn = 2131034147;
 			
 			// aapt resource value: 0x7f050022
-			public const int signupPasswordText2 = 2131034146;
+			public const int signupClearBtn = 2131034146;
 			
-			// aapt resource value: 0x7f050023
-			public const int signupSignUpBtn = 2131034147;
+			// aapt resource value: 0x7f05001e
+			public const int signupEmailText = 2131034142;
 			
 			// aapt resource value: 0x7f05001f
-			public const int signupUsernameText = 2131034143;
+			public const int signupPasswordText1 = 2131034143;
+			
+			// aapt resource value: 0x7f050020
+			public const int signupPasswordText2 = 2131034144;
+			
+			// aapt resource value: 0x7f050021
+			public const int signupSignUpBtn = 2131034145;
+			
+			// aapt resource value: 0x7f05001d
+			public const int signupUsernameText = 2131034141;
 			
 			// aapt resource value: 0x7f05000e
 			public const int textView1 = 2131034126;
@@ -227,29 +221,29 @@ namespace heariit_ma
 			// aapt resource value: 0x7f050011
 			public const int textView3 = 2131034129;
 			
-			// aapt resource value: 0x7f050026
-			public const int textView4 = 2131034150;
+			// aapt resource value: 0x7f050024
+			public const int textView4 = 2131034148;
 			
 			// aapt resource value: 0x7f050009
 			public const int title = 2131034121;
 			
-			// aapt resource value: 0x7f050029
-			public const int uploadAlbumText = 2131034153;
+			// aapt resource value: 0x7f050027
+			public const int uploadAlbumText = 2131034151;
 			
-			// aapt resource value: 0x7f050028
-			public const int uploadAuthorText = 2131034152;
-			
-			// aapt resource value: 0x7f05002c
-			public const int uploadBackBtn = 2131034156;
+			// aapt resource value: 0x7f050026
+			public const int uploadAuthorText = 2131034150;
 			
 			// aapt resource value: 0x7f05002a
-			public const int uploadPickerBtn = 2131034154;
+			public const int uploadBackBtn = 2131034154;
 			
-			// aapt resource value: 0x7f050027
-			public const int uploadTitleText = 2131034151;
+			// aapt resource value: 0x7f050028
+			public const int uploadPickerBtn = 2131034152;
 			
-			// aapt resource value: 0x7f05002b
-			public const int uploadUploadBtn = 2131034155;
+			// aapt resource value: 0x7f050025
+			public const int uploadTitleText = 2131034149;
+			
+			// aapt resource value: 0x7f050029
+			public const int uploadUploadBtn = 2131034153;
 			
 			static Id()
 			{
